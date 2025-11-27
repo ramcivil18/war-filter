@@ -617,32 +617,32 @@
     let sortConfig = { key: "warWinStreak", direction: "desc" };
 
     async function loadClans() {
-      const res = await fetch("https://ramcivil18.github.io/coc-filter/clans.json", {
-        cache: "no-store"
-      });
+  const res = await fetch("clans.json", {
+    cache: "no-store"
+  });
 
-      const data = await res.json();
+  const data = await res.json();
 
-      let updatedText = "";
+  let updatedText = "";
 
-      if (Array.isArray(data)) {
-        // Old format
-        clans = data;
-        updatedText = "Loaded at: " + new Date().toLocaleString();
-      } else if (data && Array.isArray(data.clans)) {
-        // NEW format (your current JSON)
-        clans = data.clans;
-        updatedText = "Updated: " + data.updated;
-      } else {
-        clans = [];
-      }
+  if (Array.isArray(data)) {
+    // Old format
+    clans = data;
+    updatedText = "Loaded at: " + new Date().toLocaleString();
+  } else if (data && Array.isArray(data.clans)) {
+    // NEW format
+    clans = data.clans;
+    updatedText = "Updated: " + data.updated;
+  } else {
+    clans = [];
+  }
 
-      document.getElementById("last-updated").textContent = updatedText;
+  document.getElementById("last-updated").textContent = updatedText;
 
-      applyFilters();
-      wireSorting();
-      updateSortHeaders();
-    }
+  applyFilters();
+  wireSorting();
+  updateSortHeaders();
+}
 
     function getActivePillValues(containerId) {
       const active = [...document.querySelectorAll(`#${containerId} .pill.active`)]
