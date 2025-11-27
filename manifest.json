@@ -1,0 +1,16 @@
+{
+  "name": "Clash War Clans",
+  "short_name": "War Clans",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#05091a",
+  "theme_color": "#05091a",
+  "icons": [
+    {
+      "src": "icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

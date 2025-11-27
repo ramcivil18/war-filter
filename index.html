@@ -1,0 +1,1026 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Clash of Clans — War Clans</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" type="image/png" href="icons/icon-512.png">
+  <meta name="theme-color" content="#05091a">
+
+  <!-- Custom Clash fonts (put files in /fonts folder of repo) -->
+  <style>
+    @font-face {
+      font-family: "ClashRegular";
+      src: url("fonts/Clash_Regular.otf") format("opentype");
+      font-weight: 400;
+      font-style: normal;
+    }
+    @font-face {
+      font-family: "ClashBold";
+      src: url("fonts/Clash_Bold.otf") format("opentype");
+      font-weight: 700;
+      font-style: normal;
+    }
+
+    :root {
+      --bg: #05091a;
+      --bg-card: #050c1f;
+      --bg-card-soft: #060f23;
+      --accent: #38d46b;
+      --accent-soft: #1b6b3a;
+      --pill-bg: #0d172a;
+      --pill-bg-active: #1e293b;
+      --pill-border: #1f2937;
+      --text-main: #e5edf9;
+      --text-subtle: #8b9bb8;
+      --pill-radius: 999px;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif;
+      background: radial-gradient(circle at top, #111d3d 0, var(--bg) 55%);
+      color: var(--text-main);
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+
+    /* full width, small 8px side margin */
+    .page-shell {
+      width: 100%;
+      margin: 0;
+      padding: 1rem 8px 0.5rem;
+    }
+
+    header {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      margin-bottom: 1.3rem;
+    }
+
+    .badge-row {
+      display: inline-flex;
+      align-items: center;
+      gap: .5rem;
+      padding: .35rem .85rem;
+      border-radius: 999px;
+      background: rgba(9, 15, 35, .85);
+      box-shadow: 0 0 0 1px rgba(148, 163, 184, .16),
+                  0 10px 30px rgba(15, 23, 42, .8);
+      font-size: .75rem;
+      text-transform: uppercase;
+      letter-spacing: .13em;
+      color: var(--text-subtle);
+      align-self: flex-start;
+    }
+    .badge-dot {
+      width: 8px; height: 8px;
+      border-radius: 999px;
+      background: #22c55e;
+      box-shadow: 0 0 8px #22c55e;
+    }
+
+    h1 {
+      margin: 0;
+      font-family: "ClashBold", system-ui, sans-serif;
+      font-size: clamp(1.4rem, 3.4vw, 2.2rem);
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      text-align: left;
+      background: linear-gradient(120deg, #f9df8a 0%, #f4b646 40%, #f7f2c6 65%, #f1962f 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      text-shadow:
+        0 2px 3px rgba(0,0,0,.6),
+        0 6px 18px rgba(0,0,0,.9);
+    }
+
+    .subtitle {
+      margin: .15rem 0 0;
+      font-size: .9rem;
+      color: var(--text-subtle);
+    }
+
+    /* Filter card */
+    .filter-card {
+      background: radial-gradient(circle at top left, #111c3b 0, var(--bg-card) 55%);
+      border-radius: 18px;
+      padding: 1rem .9rem 1.1rem;
+      box-shadow:
+        0 18px 45px rgba(15, 23, 42, .9),
+        0 0 0 1px rgba(148, 163, 184, .18);
+      margin-bottom: 1rem;
+    }
+
+    .filter-row-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1.2rem;
+      align-items: flex-start;
+    }
+
+    .filter-block {
+      flex: 1 1 210px;
+      min-width: 0;
+    }
+
+    .filter-label {
+      font-size: .8rem;
+      text-transform: uppercase;
+      letter-spacing: .16em;
+      color: var(--text-subtle);
+      margin-bottom: .35rem;
+    }
+
+    .pill-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: .5rem;
+    }
+
+    .pill {
+      border-radius: var(--pill-radius);
+      padding: .35rem .9rem;
+      border: 1px solid var(--pill-border);
+      background: var(--pill-bg);
+      font-size: .8rem;
+      color: var(--text-subtle);
+      cursor: pointer;
+      transition: 120ms ease-out;
+      user-select: none;
+      white-space: nowrap;
+    }
+    .pill:hover {
+      border-color: rgba(148, 163, 184, .6);
+      background: #111827;
+      color: var(--text-main);
+    }
+    .pill.active {
+      background: var(--pill-bg-active);
+      border-color: #38bdf8;
+      color: var(--text-main);
+      box-shadow: 0 0 0 1px rgba(56, 189, 248, .5);
+    }
+
+    .hours-input {
+      width: 100%;
+      padding: .6rem .9rem;
+      border-radius: 999px;
+      border: 1px solid var(--pill-border);
+      background: var(--pill-bg);
+      color: var(--text-main);
+      font-size: .9rem;
+      outline: none;
+    }
+    .hours-input::placeholder {
+      color: #64748b;
+    }
+    .hours-input:focus {
+      border-color: #38bdf8;
+      box-shadow: 0 0 0 1px rgba(56, 189, 248, .5), 0 0 0 999px rgba(15,23,42,.0);
+    }
+
+    .filter-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: .6rem;
+      margin-top: 1rem;
+      align-items: center;
+    }
+
+    .btn {
+      border-radius: 999px;
+      padding: .55rem 1.35rem;
+      border: none;
+      cursor: pointer;
+      font-size: .9rem;
+      font-weight: 500;
+      transition: 120ms ease-out;
+      white-space: nowrap;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--accent) 0%, #22c55e 55%, #4ade80 100%);
+      color: #022c12;
+      box-shadow:
+        0 10px 25px rgba(21, 128, 61, .7),
+        0 0 0 1px rgba(34, 197, 94, .7);
+    }
+    .btn-primary:hover {
+      transform: translateY(-1px);
+      box-shadow:
+        0 14px 35px rgba(21, 128, 61, .85),
+        0 0 0 1px rgba(34, 197, 94, .9);
+    }
+
+    .btn-ghost {
+      background: transparent;
+      color: var(--text-main);
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, .5);
+      padding-inline: 1.3rem;
+    }
+    .btn-ghost:hover {
+      background: rgba(15, 23, 42, .9);
+    }
+
+    .count-pill {
+      padding: .45rem 1rem;
+      border-radius: 999px;
+      background: rgba(15, 23, 42, .95);
+      border: 1px solid rgba(148, 163, 184, .4);
+      font-size: .8rem;
+      color: var(--text-subtle);
+      margin-left: auto;
+    }
+    .count-pill span {
+      color: #4ade80;
+      font-weight: 600;
+    }
+
+    /* Clan table card */
+    .list-card {
+      background: linear-gradient(180deg, var(--bg-card-soft), #020617);
+      border-radius: 12px;
+      padding: 0.4rem 0 0.3rem;
+      box-shadow:
+        0 18px 50px rgba(15, 23, 42, .95),
+        0 0 0 1px rgba(30, 64, 175, .35);
+      margin: 0;
+    }
+
+    .list-header-title {
+      font-size: .9rem;
+      text-transform: uppercase;
+      letter-spacing: .18em;
+      color: var(--text-subtle);
+      margin: 0 0 .1rem .7rem;
+    }
+    .list-header-sub {
+      font-size: .8rem;
+      color: #64748b;
+      margin: 0 0 .5rem .7rem;
+    }
+
+    .table-wrapper {
+      width: 100%;
+      overflow-x: auto;
+      overflow-y: visible;   /* no inner vertical scroll */
+      -webkit-overflow-scrolling: touch;
+      border-radius: 0 0 12px 12px;
+      border: 1px solid rgba(30, 64, 175, .5);
+      box-shadow:
+        inset 0 1px 0 rgba(148, 163, 184, .08),
+        0 8px 25px rgba(15, 23, 42, .9);
+      background: radial-gradient(circle at top left, #111827 0, #020617 55%);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 960px;
+      font-size: .82rem;
+      margin: 0;
+    }
+
+    thead tr {
+      background: rgba(15, 23, 42, .96);
+    }
+    thead th {
+      text-align: left;
+      padding: .55rem .35rem;
+      font-weight: 500;
+      color: #9ca3af;
+      text-transform: uppercase;
+      letter-spacing: .16em;
+      font-size: .7rem;
+      border-bottom: 1px solid rgba(31, 41, 55, 1);
+      border-right: 1px solid rgba(31, 41, 55, 1);  /* mild grid line */
+      position: sticky;
+      top: 0;
+      z-index: 5;
+      background: rgba(15, 23, 42, .96);
+    }
+    thead th:last-child {
+      border-right: none;
+    }
+
+    th.sortable {
+      cursor: pointer;
+      user-select: none;
+    }
+    th.sortable::after {
+      content: "";
+      margin-left: 4px;
+      font-size: 0.65rem;
+      opacity: 0.3;
+    }
+    th.sortable[data-sort-direction="asc"]::after {
+      content: "▲";
+      opacity: 0.9;
+    }
+    th.sortable[data-sort-direction="desc"]::after {
+      content: "▼";
+      opacity: 0.9;
+    }
+
+    tbody tr:nth-child(2n) {
+      background: rgba(15, 23, 42, .92);
+    }
+    tbody tr:nth-child(2n+1) {
+      background: rgba(15, 23, 42, .98);
+    }
+    tbody td {
+      padding: .45rem .35rem;
+      border-bottom: 1px solid rgba(15, 23, 42, .95);
+      border-right: 1px solid rgba(15, 23, 42, .95);
+      color: #e5e7eb;
+      vertical-align: top;
+    }
+    tbody td:last-child {
+      border-right: none;
+    }
+    tbody tr:last-child td {
+      border-bottom: none;
+    }
+
+    .clan-name {
+      font-weight: 500;
+    }
+    .clan-tag {
+      font-size: .75rem;
+      color: #6b7280;
+    }
+
+    .pill-label {
+      border-radius: 999px;
+      padding: .15rem .7rem;
+      font-size: .72rem;
+      border: 1px solid rgba(148, 163, 184, .5);
+      background: rgba(15, 23, 42, .9);
+      color: #e5e7eb;
+      display: inline-flex;
+      align-items: center;
+      gap: .25rem;
+    }
+    .pill-label.open {
+      border-color: rgba(74, 222, 128, .8);
+      color: #bbf7d0;
+      background: rgba(22, 101, 52, .5);
+    }
+    .pill-label.invite {
+      border-color: rgba(59, 130, 246, .9);
+      color: #bfdbfe;
+      background: rgba(30, 64, 175, .6);
+    }
+    .pill-label.closed {
+      border-color: rgba(248, 113, 113, .85);
+      color: #fecaca;
+      background: rgba(127, 29, 29, .7);
+    }
+
+    .pill-label.state-inwar {
+      border-color: rgba(74, 222, 128, .85);
+      background: rgba(21, 128, 61, .7);
+      color: #bbf7d0;
+    }
+    .pill-label.state-prep {
+      border-color: rgba(129, 140, 248, .9);
+      background: rgba(49, 46, 129, .8);
+      color: #e0e7ff;
+    }
+    .pill-label.state-not {
+      border-color: rgba(148, 163, 184, .8);
+      background: rgba(30, 64, 75, .8);
+      color: #e5e7eb;
+    }
+    .pill-label.state-ended {
+      border-color: rgba(248, 250, 252, .7);
+      background: rgba(15, 23, 42, .9);
+      color: #e5e7eb;
+    }
+
+    .profile-btn {
+      border-radius: 999px;
+      border: 1px solid rgba(129, 140, 248, .8);
+      padding: .25rem .75rem;
+      font-size: .75rem;
+      background: radial-gradient(circle at top, rgba(129, 140, 248, .35), rgba(15, 23, 42, 1));
+      color: #c7d2fe;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: .25rem;
+      transition: 120ms ease-out;
+    }
+    .profile-btn:hover {
+      box-shadow:
+        0 0 0 1px rgba(129, 140, 248, .9),
+        0 8px 20px rgba(15, 23, 42, .9);
+      transform: translateY(-1px);
+    }
+
+    /* widen TH columns so 4 badges fit row */
+    th:nth-child(15),
+    td:nth-child(15),
+    th:nth-child(16),
+    td:nth-child(16) {
+      min-width: 170px;
+      max-width: 220px;
+    }
+
+    /* TH composition column styling */
+    .th-comp {
+      white-space: normal;
+      font-size: 0.72rem;
+      line-height: 1.2;
+      color: #e5e7eb;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 3px;
+    }
+
+    .th-badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2px 6px;
+      border-radius: 999px;
+      font-size: 0.7rem;
+      font-weight: 500;
+      border: 1px solid rgba(148, 163, 184, .55);
+      background: rgba(15, 23, 42, .95);
+      flex: 0 0 calc(25% - 3px);  /* 4 per row */
+      box-sizing: border-box;
+    }
+
+    /* Level colors */
+    .th-lv-18 { background: radial-gradient(circle at top, #facc15, #92400e); color: #fef9c3; }
+    .th-lv-17 { background: radial-gradient(circle at top, #fb923c, #7c2d12); color: #ffedd5; }
+    .th-lv-16 { background: radial-gradient(circle at top, #f97316, #7c2d12); color: #ffedd5; }
+    .th-lv-15 { background: radial-gradient(circle at top, #a855f7, #4c1d95); color: #f3e8ff; }
+    .th-lv-14 { background: radial-gradient(circle at top, #38bdf8, #1d4ed8); color: #e0f2fe; }
+    .th-lv-13 { background: radial-gradient(circle at top, #22c55e, #166534); color: #dcfce7; }
+    .th-lv-12 { background: radial-gradient(circle at top, #2dd4bf, #115e59); color: #ccfbf1; }
+    .th-lv-11 { background: radial-gradient(circle at top, #9ca3af, #111827); color: #f9fafb; }
+
+    /* intensity by count */
+    .th-int-1 { opacity: 0.95; }
+    .th-int-2 { box-shadow: 0 0 4px rgba(148, 163, 184, .6); }
+    .th-int-3 { box-shadow: 0 0 6px rgba(248, 250, 252, .7); border-color: rgba(248, 250, 252, .8); }
+    .th-int-4 { box-shadow: 0 0 9px rgba(250, 250, 250, 1); border-color: rgba(250, 250, 250, 1); }
+
+    @media (max-width: 768px) {
+      .page-shell {
+        padding-inline: 4px;
+      }
+      header {
+        margin-bottom: 1rem;
+      }
+      .filter-card {
+        padding-inline: .7rem;
+      }
+      .table-wrapper {
+        border-radius: 0 0 10px 10px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="page-shell">
+    <header>
+      <div class="badge-row">
+        <span class="badge-dot"></span>
+        <span>Live war scouting</span>
+        <span>•</span>
+        <span id="last-updated">JSON updated: -</span>
+      </div>
+      <h1>Clash of Clans — War Clans</h1>
+      <p class="subtitle">
+        Filter high war-win clans by type, war state, raids, war size and TH compositions.
+        Data comes from your <code>clans.json</code> file.
+      </p>
+    </header>
+
+    <section class="filter-card">
+      <!-- first row: type / war state / last war hours / war size -->
+      <div class="filter-row-group">
+        <div class="filter-block">
+          <div class="filter-label">Type</div>
+          <div class="pill-row" id="type-filters">
+            <button class="pill active" data-value="all">All</button>
+            <button class="pill" data-value="open">Open</button>
+            <button class="pill" data-value="inviteOnly">Invite only</button>
+            <button class="pill" data-value="closed">Closed</button>
+          </div>
+        </div>
+
+        <div class="filter-block">
+          <div class="filter-label">War state</div>
+          <div class="pill-row" id="state-filters">
+            <button class="pill active" data-value="all">All</button>
+            <button class="pill" data-value="inWar">In war</button>
+            <button class="pill" data-value="preparation">Preparation</button>
+            <button class="pill" data-value="notInWar">Not in war</button>
+            <button class="pill" data-value="warEnded">War ended</button>
+          </div>
+        </div>
+
+        <div class="filter-block">
+          <div class="filter-label">Last war = (hours)</div>
+          <input id="hours-input" class="hours-input" type="number" min="0"
+                 placeholder="Empty = show all" inputmode="numeric" />
+        </div>
+
+        <div class="filter-block">
+          <div class="filter-label">War size =</div>
+          <input id="war-size-input" class="hours-input" type="number" min="0"
+                 placeholder="Any size" inputmode="numeric" />
+        </div>
+      </div>
+
+      <!-- second row: raid filters -->
+      <div class="filter-row-group" style="margin-top: 0.9rem;">
+        <div class="filter-block">
+          <div class="filter-label">Raid state</div>
+          <div class="pill-row" id="raid-filters">
+            <button class="pill active" data-value="all">All</button>
+            <button class="pill" data-value="ongoing">Ongoing</button>
+            <button class="pill" data-value="ended">Ended</button>
+            <button class="pill" data-value="none">No raid</button>
+          </div>
+        </div>
+
+        <div class="filter-block">
+          <div class="filter-label">Raid reward ≥</div>
+          <input id="raid-reward-input" class="hours-input" type="number" min="0"
+                 placeholder="Any reward" inputmode="numeric" />
+        </div>
+
+        <div class="filter-block">
+          <div class="filter-label">Raids completed ≥</div>
+          <input id="raids-completed-input" class="hours-input" type="number" min="0"
+                 placeholder="Any count" inputmode="numeric" />
+        </div>
+      </div>
+
+      <div class="filter-actions">
+        <button id="apply-btn" class="btn btn-primary">Apply filters</button>
+        <button id="clear-btn" class="btn btn-ghost">Clear</button>
+        <button id="download-csv-btn" class="btn btn-ghost">Download CSV</button>
+        <div id="count-label" class="count-pill">Showing <span>0</span> clans</div>
+      </div>
+    </section>
+
+    <section class="list-card">
+      <div class="list-header-title">CLAN LIST</div>
+      <div class="list-header-sub">Click headers to sort • Default: Win streak (desc)</div>
+      <div class="table-wrapper">
+        <table id="clan-table">
+          <thead>
+            <tr>
+              <th class="sortable" data-sort-key="name">Clan</th>
+              <th>Profile</th>
+              <th class="sortable" data-sort-key="type">Type</th>
+              <th class="sortable" data-sort-key="clanLevel">Lvl</th>
+              <th class="sortable" data-sort-key="warWins">War Wins</th>
+              <th class="sortable" data-sort-key="warWinStreak">Win Streak</th>
+              <th class="sortable" data-sort-key="warLeague">League</th>
+              <th class="sortable" data-sort-key="members">Members</th>
+              <th class="sortable" data-sort-key="teamSize">War size</th>
+              <th class="sortable" data-sort-key="end_time">Last war (hrs)</th>
+              <th class="sortable" data-sort-key="state">War state</th>
+              <th class="sortable" data-sort-key="raidState">Raid state</th>
+              <th class="sortable" data-sort-key="raidTotalReward">Raid reward</th>
+              <th class="sortable" data-sort-key="raidsCompleted">Raids done</th>
+              <th>TH comp</th>
+              <th>Opp TH comp</th>
+            </tr>
+          </thead>
+          <tbody id="clan-tbody">
+            <!-- filled by JS -->
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </div>
+
+  <script>
+    let clans = [];
+    let currentView = [];
+    let sortConfig = { key: "warWinStreak", direction: "desc" };
+
+    async function loadClans() {
+      const res = await fetch("https://ramcivil18.github.io/coc-filter/clans.json", {
+        cache: "no-store"
+      });
+
+      const data = await res.json();
+
+      let updatedText = "";
+
+      if (Array.isArray(data)) {
+        // Old format
+        clans = data;
+        updatedText = "Loaded at: " + new Date().toLocaleString();
+      } else if (data && Array.isArray(data.clans)) {
+        // NEW format (your current JSON)
+        clans = data.clans;
+        updatedText = "Updated: " + data.updated;
+      } else {
+        clans = [];
+      }
+
+      document.getElementById("last-updated").textContent = updatedText;
+
+      applyFilters();
+      wireSorting();
+      updateSortHeaders();
+    }
+
+    function getActivePillValues(containerId) {
+      const active = [...document.querySelectorAll(`#${containerId} .pill.active`)]
+        .map(p => p.dataset.value);
+      if (active.includes("all") || active.length === 0) {
+        return ["all"];
+      }
+      return active;
+    }
+
+    const numericKeys = new Set([
+      "clanLevel",
+      "warWins",
+      "warWinStreak",
+      "members",
+      "teamSize",
+      "end_time",
+      "raidTotalReward",
+      "raidsCompleted"
+    ]);
+
+    function sortClans(list) {
+      const { key, direction } = sortConfig;
+      if (!key) return list.slice();
+
+      const dir = direction === "asc" ? 1 : -1;
+
+      return list.slice().sort((a, b) => {
+        let va = a[key];
+        let vb = b[key];
+
+        if (va == null && vb == null) return 0;
+        if (va == null) return 1;
+        if (vb == null) return -1;
+
+        if (numericKeys.has(key)) {
+          va = Number(va) || 0;
+          vb = Number(vb) || 0;
+        } else {
+          va = String(va).toLowerCase();
+          vb = String(vb).toLowerCase();
+        }
+
+        if (va < vb) return -1 * dir;
+        if (va > vb) return 1 * dir;
+        return 0;
+      });
+    }
+
+    function updateSortHeaders() {
+      document.querySelectorAll("th.sortable").forEach(th => {
+        const key = th.dataset.sortKey;
+        if (key === sortConfig.key) {
+          th.dataset.sortDirection = sortConfig.direction;
+        } else {
+          th.dataset.sortDirection = "";
+        }
+      });
+    }
+
+    function wireSorting() {
+      document.querySelectorAll("th.sortable").forEach(th => {
+        th.addEventListener("click", () => {
+          const key = th.dataset.sortKey;
+          if (!key) return;
+
+          if (sortConfig.key === key) {
+            sortConfig.direction = sortConfig.direction === "asc" ? "desc" : "asc";
+          } else {
+            sortConfig.key = key;
+            sortConfig.direction = (key === "warWinStreak" || key === "warWins" || key === "raidTotalReward" || key === "raidsCompleted")
+              ? "desc"
+              : "asc";
+          }
+          applyFilters();
+          updateSortHeaders();
+        });
+      });
+    }
+
+    function renderThCompCell(td, value) {
+      td.innerHTML = "";
+      if (!value) {
+        td.textContent = "-";
+        return;
+      }
+      const parts = String(value).split(/\s+/).filter(Boolean);
+
+      for (const part of parts) {
+        const [thStr, countStr] = part.split(":");
+        const th = parseInt(thStr, 10);
+        const count = parseInt(countStr, 10);
+
+        const span = document.createElement("span");
+        span.classList.add("th-badge");
+
+        if (!Number.isNaN(th)) {
+          span.classList.add(`th-lv-${th}`);
+        }
+
+        if (!Number.isNaN(count)) {
+          if (count >= 30) span.classList.add("th-int-4");
+          else if (count >= 15) span.classList.add("th-int-3");
+          else if (count >= 5) span.classList.add("th-int-2");
+          else span.classList.add("th-int-1");
+          span.textContent = `${th}:${count}`;
+        } else {
+          span.textContent = part;
+        }
+
+        td.appendChild(span);
+      }
+    }
+
+    function renderClans(list) {
+      const tbody = document.getElementById("clan-tbody");
+      tbody.innerHTML = "";
+
+      for (const c of list) {
+        const tr = document.createElement("tr");
+
+        const tdClan = document.createElement("td");
+        tdClan.innerHTML = `<div class="clan-name">${c.name || "Unknown"}</div>
+                            <div class="clan-tag">${c.tag || ""}</div>`;
+        tr.appendChild(tdClan);
+
+        const tdProfile = document.createElement("td");
+        if (c.tag) {
+          const cleanTag = c.tag.replace("#", "");
+          const href = `https://link.clashofclans.com/en?action=OpenClanProfile&tag=${cleanTag}`;
+          tdProfile.innerHTML = `<a class="profile-btn" href="${href}" target="_blank" rel="noopener">
+                                   Open
+                                 </a>`;
+        } else {
+          tdProfile.textContent = "-";
+        }
+        tr.appendChild(tdProfile);
+
+        const tdType = document.createElement("td");
+        const t = (c.type || "").toLowerCase();
+        let typeClass = "";
+        if (t === "open") typeClass = "open";
+        else if (t === "inviteonly") typeClass = "invite";
+        else if (t === "closed") typeClass = "closed";
+        tdType.innerHTML = `<span class="pill-label ${typeClass}">
+                              ${(c.type || "Unknown")}
+                            </span>`;
+        tr.appendChild(tdType);
+
+        const addCell = (val) => {
+          const td = document.createElement("td");
+          td.textContent = (val === null || val === undefined) ? "-" : val;
+          tr.appendChild(td);
+        };
+
+        addCell(c.clanLevel);
+        addCell(c.warWins);
+        addCell(c.warWinStreak);
+        addCell(c.warLeague || "-");
+        addCell(c.members);
+        addCell(c.teamSize);
+        addCell(c.end_time ?? "-");
+
+        const tdState = document.createElement("td");
+        const st = (c.state || "unknown");
+        let cls = "";
+        if (st === "inWar") cls = "state-inwar";
+        else if (st === "preparation") cls = "state-prep";
+        else if (st === "notInWar") cls = "state-not";
+        else if (st === "warEnded") cls = "state-ended";
+        tdState.innerHTML = `<span class="pill-label ${cls}">${st}</span>`;
+        tr.appendChild(tdState);
+
+        const tdRaidState = document.createElement("td");
+        const rsRaw = c.raidState == null ? "none" : c.raidState;
+        let rsCls = "";
+        if (rsRaw === "ongoing") rsCls = "state-prep";
+        else if (rsRaw === "ended") rsCls = "state-ended";
+        tdRaidState.innerHTML = `<span class="pill-label ${rsCls}">${rsRaw}</span>`;
+        tr.appendChild(tdRaidState);
+
+        addCell(c.raidTotalReward);
+        addCell(c.raidsCompleted);
+
+        const tdTh = document.createElement("td");
+        tdTh.className = "th-comp";
+        renderThCompCell(tdTh, c.th_comp);
+        tr.appendChild(tdTh);
+
+        const tdOppTh = document.createElement("td");
+        tdOppTh.className = "th-comp";
+        renderThCompCell(tdOppTh, c.opp_th_comp);
+        tr.appendChild(tdOppTh);
+
+        tbody.appendChild(tr);
+      }
+
+      document.querySelector("#count-label span").textContent = list.length.toString();
+    }
+
+    function applyFilters() {
+      const typeFilters = getActivePillValues("type-filters");
+      const stateFilters = getActivePillValues("state-filters");
+      const raidFilters = getActivePillValues("raid-filters");
+
+      const hoursInput = document.getElementById("hours-input");
+      const rawHours = hoursInput.value.trim();
+
+      let exactHours = null;
+      if (rawHours !== "") {
+        const parsed = parseFloat(rawHours);
+        if (!Number.isNaN(parsed) && parsed >= 0) {
+          exactHours = parsed;
+        }
+      }
+
+      const warSizeRaw = document.getElementById("war-size-input").value.trim();
+      let exactWarSize = null;
+      if (warSizeRaw !== "") {
+        const parsed = parseInt(warSizeRaw, 10);
+        if (!Number.isNaN(parsed) && parsed >= 0) {
+          exactWarSize = parsed;
+        }
+      }
+
+      const raidRewardRaw = document.getElementById("raid-reward-input").value.trim();
+      let minRaidReward = null;
+      if (raidRewardRaw !== "") {
+        const parsed = parseFloat(raidRewardRaw);
+        if (!Number.isNaN(parsed) && parsed >= 0) {
+          minRaidReward = parsed;
+        }
+      }
+
+      const raidsCompletedRaw = document.getElementById("raids-completed-input").value.trim();
+      let minRaidsCompleted = null;
+      if (raidsCompletedRaw !== "") {
+        const parsed = parseFloat(raidsCompletedRaw);
+        if (!Number.isNaN(parsed) && parsed >= 0) {
+          minRaidsCompleted = parsed;
+        }
+      }
+
+      const filtered = clans.filter(c => {
+        if (!typeFilters.includes("all")) {
+          const t = (c.type || "").toLowerCase();
+          const allowed = typeFilters.map(v => v.toLowerCase());
+          if (!allowed.includes(t)) return false;
+        }
+
+        if (!stateFilters.includes("all")) {
+          const st = (c.state || "");
+          if (!stateFilters.includes(st)) return false;
+        }
+
+        if (exactHours !== null) {
+          const h = typeof c.end_time === "number"
+            ? c.end_time
+            : parseFloat(c.end_time);
+          if (Number.isNaN(h) || h !== exactHours) return false;
+        }
+
+        if (exactWarSize !== null) {
+          const sz = Number(c.teamSize);
+          if (Number.isNaN(sz) || sz !== exactWarSize) return false;
+        }
+
+        if (!raidFilters.includes("all")) {
+          const rs = c.raidState == null ? "none" : c.raidState;
+          if (!raidFilters.includes(rs)) return false;
+        }
+
+        if (minRaidReward !== null) {
+          const val = Number(c.raidTotalReward);
+          if (Number.isNaN(val) || val < minRaidReward) return false;
+        }
+
+        if (minRaidsCompleted !== null) {
+          const val = Number(c.raidsCompleted);
+          if (Number.isNaN(val) || val < minRaidsCompleted) return false;
+        }
+
+        return true;
+      });
+
+      const sorted = sortClans(filtered);
+      currentView = sorted;
+      renderClans(sorted);
+    }
+
+    function wirePills(containerId) {
+      const container = document.getElementById(containerId);
+      container.addEventListener("click", (e) => {
+        const pill = e.target.closest(".pill");
+        if (!pill) return;
+
+        const value = pill.dataset.value;
+
+        if (value === "all") {
+          container.querySelectorAll(".pill").forEach(p => p.classList.remove("active"));
+          pill.classList.add("active");
+          return;
+        }
+
+        pill.classList.toggle("active");
+
+        const anyActive = [...container.querySelectorAll(".pill")]
+          .some(p => p.dataset.value !== "all" && p.classList.contains("active"));
+
+        if (anyActive) {
+          container.querySelector('.pill[data-value="all"]').classList.remove("active");
+        } else {
+          container.querySelector('.pill[data-value="all"]').classList.add("active");
+        }
+      });
+    }
+
+    document.getElementById("apply-btn").addEventListener("click", applyFilters);
+    document.getElementById("clear-btn").addEventListener("click", () => {
+      document.querySelectorAll(".pill").forEach(p => p.classList.remove("active"));
+      document.querySelector('#type-filters .pill[data-value="all"]').classList.add("active");
+      document.querySelector('#state-filters .pill[data-value="all"]').classList.add("active");
+      document.querySelector('#raid-filters .pill[data-value="all"]').classList.add("active");
+      document.getElementById("hours-input").value = "";
+      document.getElementById("war-size-input").value = "";
+      document.getElementById("raid-reward-input").value = "";
+      document.getElementById("raids-completed-input").value = "";
+      sortConfig = { key: "warWinStreak", direction: "desc" };
+      updateSortHeaders();
+      applyFilters();
+    });
+
+    document.getElementById("download-csv-btn").addEventListener("click", () => {
+      if (!currentView || currentView.length === 0) {
+        alert("No clans to export. Adjust filters or load data first.");
+        return;
+      }
+
+      const headers = [
+        "tag","name","type","clanLevel","clanPoints","requiredTrophies",
+        "warFrequency","warWinStreak","warWins","isWarLogPublic",
+        "members","teamSize","state","end_time",
+        "raidState","raidTotalReward","raidsCompleted",
+        "th_comp","opp_th_comp"
+      ];
+
+      const rows = [headers];
+
+      currentView.forEach(c => {
+        rows.push(headers.map(h => (c[h] ?? "")));
+      });
+
+      const csv = rows.map(row =>
+        row.map(val => {
+          const s = String(val ?? "");
+          const needsQuote = s.includes(",") || s.includes('"') || s.includes("\n");
+          const escaped = s.replace(/"/g, '""');
+          return needsQuote ? `"${escaped}"` : escaped;
+        }).join(",")
+      ).join("\n");
+
+      const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "clans_export.csv";
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    });
+
+    wirePills("type-filters");
+    wirePills("state-filters");
+    wirePills("raid-filters");
+
+    loadClans();
+  </script>
+
+</body>
+</html>
