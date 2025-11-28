@@ -1,12 +1,19 @@
 {
-  "name": "Clash War Clans",
+  "name": "Clash of Clans — War Clans",
   "short_name": "War Clans",
+  "description": "Filter high war-win Clash of Clans clans by war state, raids, war size and TH comps.",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
+  "orientation": "portrait",
   "background_color": "#05091a",
   "theme_color": "#05091a",
   "icons": [
+    {
+      "src": "icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
     {
       "src": "icons/icon-512.png",
       "sizes": "512x512",
