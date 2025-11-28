@@ -271,12 +271,13 @@
     .table-wrapper {
       width: 100%;
       overflow-x: auto;
-      overflow-y: visible;   /* no inner vertical scroll */
+      overflow-y: auto;        /* vertical scroll inside table */
+      max-height: calc(100vh - 260px); /* so header can stick */
       -webkit-overflow-scrolling: touch;
       border-radius: 0 0 12px 12px;
-      border: 1px solid rgba(30, 64, 175, .5);
+      border: 1px solid rgba(30, 64, 175, .7);
       box-shadow:
-        inset 0 1px 0 rgba(148, 163, 184, .08),
+        inset 0 1px 0 rgba(148, 163, 184, .12),
         0 8px 25px rgba(15, 23, 42, .9);
       background: radial-gradient(circle at top left, #111827 0, #020617 55%);
     }
@@ -293,22 +294,28 @@
       background: rgba(15, 23, 42, .96);
     }
     thead th {
-      text-align: left;
+      text-align: center; /* center all headers by default */
       padding: .55rem .35rem;
       font-weight: 500;
-      color: #9ca3af;
+      color: #e5e7eb;
       text-transform: uppercase;
       letter-spacing: .16em;
       font-size: .7rem;
-      border-bottom: 1px solid rgba(31, 41, 55, 1);
-      border-right: 1px solid rgba(31, 41, 55, 1);  /* mild grid line */
+      border-bottom: 1px solid rgba(55, 65, 81, 1);
+      border-right: 1px solid rgba(55, 65, 81, 1);  /* visible column grid */
       position: sticky;
       top: 0;
       z-index: 5;
-      background: rgba(15, 23, 42, .96);
+      background: rgba(15, 23, 42, .98);
     }
     thead th:last-child {
       border-right: none;
+    }
+
+    /* keep first header left aligned for readability */
+    thead th:first-child {
+      text-align: left;
+      padding-left: .7rem;
     }
 
     th.sortable {
@@ -338,16 +345,23 @@
     }
     tbody td {
       padding: .45rem .35rem;
-      border-bottom: 1px solid rgba(15, 23, 42, .95);
-      border-right: 1px solid rgba(15, 23, 42, .95);
+      border-bottom: 1px solid rgba(31, 41, 55, .9);
+      border-right: 1px solid rgba(31, 41, 55, .9);  /* column grid */
       color: #e5e7eb;
       vertical-align: top;
+      text-align: center;
     }
     tbody td:last-child {
       border-right: none;
     }
     tbody tr:last-child td {
       border-bottom: none;
+    }
+
+    /* first col left aligned (name + tag) */
+    tbody td:first-child {
+      text-align: left;
+      padding-left: .7rem;
     }
 
     .clan-name {
@@ -432,7 +446,7 @@
     th:nth-child(16),
     td:nth-child(16) {
       min-width: 170px;
-      max-width: 220px;
+      max-width: 230px;
     }
 
     /* TH composition column styling */
@@ -443,7 +457,8 @@
       color: #e5e7eb;
       display: flex;
       flex-wrap: wrap;
-      gap: 3px;
+      gap: 4px;
+      justify-content: flex-start;
     }
 
     .th-badge {
@@ -456,8 +471,10 @@
       font-weight: 500;
       border: 1px solid rgba(148, 163, 184, .55);
       background: rgba(15, 23, 42, .95);
-      flex: 0 0 calc(25% - 3px);  /* 4 per row */
+      flex: 0 0 25%;      /* 4 per row */
+      max-width: 25%;
       box-sizing: border-box;
+      text-align: center;
     }
 
     /* Level colors */
@@ -488,6 +505,7 @@
       }
       .table-wrapper {
         border-radius: 0 0 10px 10px;
+        max-height: calc(100vh - 220px);
       }
     }
   </style>
@@ -617,32 +635,32 @@
     let sortConfig = { key: "warWinStreak", direction: "desc" };
 
     async function loadClans() {
-  const res = await fetch("clans.json", {
-    cache: "no-store"
-  });
+      const res = await fetch("clans.json", {
+        cache: "no-store"
+      });
 
-  const data = await res.json();
+      const data = await res.json();
 
-  let updatedText = "";
+      let updatedText = "";
 
-  if (Array.isArray(data)) {
-    // Old format
-    clans = data;
-    updatedText = "Loaded at: " + new Date().toLocaleString();
-  } else if (data && Array.isArray(data.clans)) {
-    // NEW format
-    clans = data.clans;
-    updatedText = "Updated: " + data.updated;
-  } else {
-    clans = [];
-  }
+      if (Array.isArray(data)) {
+        // Old format
+        clans = data;
+        updatedText = "Loaded at: " + new Date().toLocaleString();
+      } else if (data && Array.isArray(data.clans)) {
+        // NEW format
+        clans = data.clans;
+        updatedText = "Updated: " + data.updated;
+      } else {
+        clans = [];
+      }
 
-  document.getElementById("last-updated").textContent = updatedText;
+      document.getElementById("last-updated").textContent = updatedText;
 
-  applyFilters();
-  wireSorting();
-  updateSortHeaders();
-}
+      applyFilters();
+      wireSorting();
+      updateSortHeaders();
+    }
 
     function getActivePillValues(containerId) {
       const active = [...document.querySelectorAll(`#${containerId} .pill.active`)]
