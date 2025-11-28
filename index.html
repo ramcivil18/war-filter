@@ -3,22 +3,28 @@
 <head>
   <meta charset="utf-8" />
   <title>Clash of Clans — War Clans</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="theme-color" content="#ffffff">
 
   <style>
     /* --- FONTS --- */
     @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Lato:wght@400;700&display=swap');
 
+    /* --- ROYAL THEME VARIABLES --- */
     :root {
       --bg-page: #f8f9fa;
       --bg-card: #ffffff;
-      --text-main: #1e293b;
-      --text-subtle: #64748b;
-      --royal-blue: #1e3a8a;
-      --royal-gold: #d97706;
-      --grid-line: #cbd5e1;
+      --text-main: #1e293b;      /* Dark slate */
+      --text-subtle: #64748b;    /* Muted slate */
+      
+      --royal-blue: #1e3a8a;     /* Deep Royal Blue */
+      --royal-gold: #d97706;     /* Dark Gold/Bronze */
+      --royal-gold-light: #fbbf24;
+      
+      --grid-line: #e2e8f0;      /* Light gray borders */
+      
       --pill-bg: #f1f5f9;
+      --pill-border: #cbd5e1;
       --pill-active-bg: var(--royal-blue);
       --pill-active-text: #ffffff;
     }
@@ -27,212 +33,271 @@
 
     body {
       margin: 0;
-      padding: 0;
       font-family: 'Lato', system-ui, sans-serif;
       background-color: var(--bg-page);
       color: var(--text-main);
-      /* Prevent horizontal scroll on body, handle it in table */
-      overflow-x: hidden; 
+      overflow-y: auto;
+      overflow-x: hidden;
     }
 
-    /* --- LAYOUT --- */
-    .content-pad {
-      max-width: 1400px;
+    /* --- PAGE LAYOUT --- */
+    .page-shell {
+      width: 100%;
+      max-width: 100%;
       margin: 0 auto;
-      padding: 1rem 15px 0;
+      padding: 1.5rem 20px 3rem;
     }
 
+    /* --- HEADER --- */
     header {
       display: flex;
       flex-direction: column;
       gap: 0.5rem;
-      margin-bottom: 1rem;
+      margin-bottom: 2rem;
       border-bottom: 3px solid var(--royal-gold);
-      padding-bottom: 0.5rem;
+      padding-bottom: 1rem;
     }
 
     h1 {
       margin: 0;
-      font-family: 'Cinzel', serif;
-      font-size: clamp(1.4rem, 4vw, 2.5rem);
+      font-family: 'Cinzel', serif; /* Royal Serif Font */
+      font-size: clamp(1.8rem, 4vw, 2.8rem);
+      text-transform: uppercase;
       color: var(--royal-blue);
+      letter-spacing: 1px;
       display: flex;
       align-items: center;
       gap: 10px;
     }
 
+    h1::before {
+      content: '👑';
+      font-size: 0.8em;
+    }
+
     .badge-row {
-      font-size: .75rem;
+      display: inline-flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .8rem;
       font-weight: 700;
       text-transform: uppercase;
+      letter-spacing: .05em;
       color: var(--royal-gold);
     }
 
-    /* --- FILTERS --- */
+    /* --- FILTER CARD --- */
     .filter-card {
       background: var(--bg-card);
       border-radius: 8px;
-      padding: 1rem;
+      padding: 1.5rem;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 
+                  0 10px 15px -3px rgba(0, 0, 0, 0.05);
       border: 1px solid var(--grid-line);
-      margin-bottom: 1.5rem;
+      margin-bottom: 2rem;
     }
 
     .filter-group-title {
       font-family: 'Cinzel', serif;
       color: var(--royal-blue);
-      font-size: 0.9rem;
-      margin-bottom: 0.5rem;
+      font-size: 1rem;
+      margin-bottom: 0.8rem;
       border-bottom: 1px solid var(--grid-line);
+      padding-bottom: 0.3rem;
       width: 100%;
     }
 
     .filter-row-group {
       display: flex;
       flex-wrap: wrap;
-      gap: 0.8rem;
+      gap: 1.5rem;
       align-items: flex-end;
-      margin-bottom: 1rem;
+      margin-bottom: 1.5rem;
     }
 
-    .filter-block { flex: 1 1 auto; }
-    
+    .filter-block { flex: 1 1 160px; }
+
     .filter-label {
-      font-size: 0.7rem;
+      font-size: 0.75rem;
       font-weight: 700;
       text-transform: uppercase;
       color: var(--text-subtle);
-      margin-bottom: 0.3rem;
+      margin-bottom: 0.4rem;
     }
 
-    .pill-row { display: flex; flex-wrap: wrap; gap: 0.3rem; }
+    /* Pills */
+    .pill-row { display: flex; flex-wrap: wrap; gap: 0.4rem; }
     
     .pill {
       background: var(--pill-bg);
-      border: 1px solid var(--grid-line);
+      border: 1px solid var(--pill-border);
       color: var(--text-main);
-      padding: 0.3rem 0.7rem;
-      border-radius: 4px;
+      padding: 0.4rem 0.9rem;
+      border-radius: 4px; /* Sharper corners for royal look */
       cursor: pointer;
-      font-size: 0.8rem;
+      transition: 0.2s;
+      font-size: 0.85rem;
+      font-weight: 500;
     }
+    .pill:hover { background: #e2e8f0; }
     .pill.active {
       background: var(--pill-active-bg);
       color: var(--pill-active-text);
       border-color: var(--royal-blue);
+      box-shadow: 0 2px 4px rgba(30, 58, 138, 0.3);
     }
 
+    /* Inputs */
     .input-field {
       width: 100%;
-      padding: 0.4rem;
-      border: 1px solid var(--grid-line);
+      padding: 0.5rem 0.8rem;
+      background: #fff;
+      border: 1px solid var(--pill-border);
       border-radius: 4px;
+      color: var(--text-main);
       font-size: 0.9rem;
     }
+    .input-field:focus {
+      outline: none;
+      border-color: var(--royal-gold);
+      box-shadow: 0 0 0 2px rgba(217, 119, 6, 0.1);
+    }
 
+    /* Actions */
     .filter-actions {
       display: flex;
       align-items: center;
-      gap: 0.8rem;
-      margin-top: 0.8rem;
+      gap: 1rem;
+      margin-top: 1rem;
       flex-wrap: wrap;
-      padding-top: 0.8rem;
+      padding-top: 1rem;
       border-top: 1px dashed var(--grid-line);
     }
 
     .btn {
-      padding: 0.5rem 1.2rem;
+      padding: 0.6rem 1.5rem;
       border-radius: 4px;
       border: none;
+      font-family: 'Cinzel', serif;
       font-weight: 700;
       cursor: pointer;
-      font-size: 0.85rem;
+      transition: transform 0.1s;
     }
-    .btn-primary { background: linear-gradient(to bottom, #d97706, #b45309); color: #fff; }
-    .btn-ghost { background: white; border: 1px solid var(--royal-blue); color: var(--royal-blue); }
-    .count-pill { margin-left: auto; font-weight: bold; color: var(--royal-blue); font-size: 0.85rem;}
+    .btn:active { transform: translateY(1px); }
+
+    .btn-primary {
+      background: linear-gradient(to bottom, #d97706, #b45309);
+      color: #fff;
+      box-shadow: 0 4px 6px rgba(180, 83, 9, 0.3);
+    }
+    .btn-ghost {
+      background: white;
+      border: 1px solid var(--royal-blue);
+      color: var(--royal-blue);
+    }
+
+    .count-pill {
+      margin-left: auto;
+      font-weight: bold;
+      color: var(--royal-blue);
+      font-size: 0.9rem;
+    }
 
     /* --- TABLE STYLING --- */
     
-    .table-wrapper {
+    .table-container {
       width: 100%;
+      overflow-x: auto; /* Horizontal scroll on small screens */
+      border: 1px solid var(--royal-blue);
+      border-radius: 8px 8px 0 0;
       background: #fff;
-      /* Default Desktop: Let page scroll */
-      overflow: visible; 
+      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
     }
 
     table {
       width: 100%;
       border-collapse: collapse;
+      min-width: 1300px; /* Ensure enough width for all columns */
       font-size: 0.85rem;
     }
 
+    /* Sticky Header */
     thead th {
       position: sticky;
       top: 0;
       z-index: 50;
       background: var(--royal-blue);
       color: #fff;
-      padding: 0.8rem 0.5rem;
+      padding: 1rem 0.5rem;
       text-transform: uppercase;
       font-size: 0.75rem;
       letter-spacing: 0.05em;
-      border-right: 1px solid #3b5594;
-      white-space: nowrap; /* Keep headers on one line */
+      font-family: 'Lato', sans-serif;
+      border: 1px solid #3b5594; /* Slightly lighter blue for grid in header */
       cursor: pointer;
+      user-select: none;
     }
     
-    /* Specific width for the Name column so it looks good when sticky */
-    th:first-child, td:first-child {
-      position: sticky; 
-      left: 0; 
-      z-index: 51; /* Higher than other headers */
-      background: inherit; /* Inherit row color */
-      border-right: 2px solid var(--royal-gold); /* Separator */
-    }
-    /* Fix for sticky header corner overlap */
-    thead th:first-child {
-      z-index: 60;
-      background: var(--royal-blue);
+    thead th:hover {
+      background: #172554; /* Darker blue on hover */
     }
 
-    tbody tr { background: #fff; }
-    tbody tr:nth-child(even) { background-color: #f8fafc; }
-    
+    /* Sort Indicators */
+    th.sortable::after { content: " ↕"; opacity: 0.4; }
+    th.sortable[data-sort-direction="asc"]::after { content: " ▲"; opacity: 1; color: var(--royal-gold-light); }
+    th.sortable[data-sort-direction="desc"]::after { content: " ▼"; opacity: 1; color: var(--royal-gold-light); }
+
+    /* Body Cells */
     tbody td {
-      padding: 0.6rem 0.5rem;
-      border-bottom: 1px solid var(--grid-line);
-      border-right: 1px solid #f1f5f9;
+      padding: 0.75rem 0.5rem;
+      border: 1px solid var(--grid-line);
       color: var(--text-main);
-      text-align: center;
-      white-space: nowrap; /* Prevent wrapping on numbers */
+      vertical-align: middle;
+      text-align: center; /* Centered Content */
     }
 
-    /* Clan Name Cell overrides */
-    td.text-left { 
-      text-align: left !important; 
-      max-width: 180px; 
-      white-space: normal; /* Allow name to wrap if super long */
-      min-width: 120px;
-    }
+    /* Zebra Striping */
+    tbody tr:nth-child(even) { background-color: #f8fafc; }
+    tbody tr:hover { background-color: #e0f2fe; } /* Light blue hover */
+
+    /* Specific Columns */
+    .text-left { text-align: left !important; }
     
-    .clan-name { font-weight: 700; color: var(--royal-blue); display: block; line-height: 1.1; }
-    .clan-tag { font-size: 0.7rem; color: var(--text-subtle); font-family: monospace; display: block; margin-top: 2px;}
-
-    .profile-btn {
-      border: 1px solid var(--royal-blue);
-      color: var(--royal-blue);
-      padding: 2px 8px;
-      border-radius: 10px;
-      font-size: 0.65rem;
+    .clan-name {
       font-weight: 700;
+      font-size: 0.95rem;
+      color: var(--royal-blue);
+      display: block;
+      margin-bottom: 2px;
+    }
+    .clan-tag {
+      font-size: 0.75rem;
+      color: var(--text-subtle);
+      font-family: monospace;
+    }
+
+    /* Buttons & Pills in Table */
+    .profile-btn {
+      display: inline-block;
+      background: #fff;
+      color: var(--royal-blue);
+      border: 1px solid var(--royal-blue);
       text-decoration: none;
+      padding: 3px 12px;
+      border-radius: 99px;
+      font-size: 0.7rem;
+      font-weight: 700;
       text-transform: uppercase;
+    }
+    .profile-btn:hover {
+      background: var(--royal-blue);
+      color: white;
     }
 
     .status-pill {
-      padding: 3px 6px;
+      padding: 3px 8px;
       border-radius: 4px;
-      font-size: 0.65rem;
+      font-size: 0.7rem;
       font-weight: 700;
       text-transform: uppercase;
       border: 1px solid transparent;
@@ -241,148 +306,143 @@
     .st-prep { background: #dbeafe; color: #1e40af; border-color: #93c5fd; }
     .st-not { background: #fee2e2; color: #991b1b; border-color: #fca5a5; }
 
-    /* --- TH COMPOSITION BADGES --- */
-    
-    /* Force minimum width on these columns so badges don't crush */
-    .th-col-cell {
-      min-width: 200px; /* Essential for Mobile */
-      white-space: normal; /* Allow badges to wrap */
-    }
-
+    /* TH Composition */
     .th-container {
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
       gap: 3px;
+      max-width: 240px;
+      margin: 0 auto;
     }
-    
     .th-badge {
       background: #fff;
       border: 1px solid #cbd5e1;
+      border-radius: 3px;
       padding: 1px 4px;
       font-size: 0.7rem;
       font-weight: 600;
       color: #334155;
-      border-radius: 3px;
-      /* Flex grow ensures they look consistent */
-      flex: 0 0 auto; 
+      box-shadow: 0 1px 1px rgba(0,0,0,0.05);
+      white-space: nowrap;
     }
-    .th-18 { background: #fef9c3; border-color: #eab308; color: #854d0e; }
-    .th-17 { background: #ffedd5; border-color: #f97316; color: #9a3412; }
-    .th-16 { background: #fee2e2; border-color: #ef4444; color: #991b1b; }
-
-    /* --- MOBILE SPECIFIC OVERRIDES --- */
+    /* Highlight high levels */
+    .th-18 { background: #fef9c3; border-color: #eab308; color: #854d0e; } /* Yellow/Gold */
+    .th-17 { background: #ffedd5; border-color: #f97316; color: #9a3412; } /* Orange */
+    .th-16 { background: #fee2e2; border-color: #ef4444; color: #991b1b; } /* Red */
+    
     @media (max-width: 768px) {
-      /* 
-         On mobile, we switch from "Window Scroll" to "Container Scroll".
-         This ensures the header stays sticky even when scrolling horizontally.
-      */
-      .table-wrapper {
-        position: relative;
-        overflow: auto; /* Enable scrollbars */
-        height: 75vh;   /* Force height so the table scrolls internally */
-        border-top: 1px solid var(--royal-blue);
-        box-shadow: inset 0 2px 5px rgba(0,0,0,0.05);
-      }
-
-      /* Slightly increase cell padding for touch targets */
-      tbody td { padding: 0.8rem 0.5rem; }
-      
-      /* Increase TH column width on mobile for the "4 badge" look */
-      .th-col-cell { min-width: 240px; }
-      
-      /* Fix the Name column background so it doesn't become transparent over other text */
-      th:first-child, td:first-child {
-        background: #fff; 
-        border-right: 2px solid #ccc;
-        box-shadow: 2px 0 5px rgba(0,0,0,0.1);
-      }
-      tbody tr:nth-child(even) td:first-child { background: #f8fafc; }
-      
-      /* Header fix for mobile corner */
-      thead th:first-child { background: var(--royal-blue); }
+      .page-shell { padding: 1rem 10px; }
+      h1 { font-size: 1.5rem; }
+      .filter-card { padding: 1rem; }
     }
   </style>
 </head>
 <body>
 
-  <div class="content-pad">
+  <div class="page-shell">
     <header>
       <div class="badge-row">
-        <span>Updated:</span>
-        <span id="last-updated">...</span>
+        <span>Last Updated:</span>
+        <span id="last-updated" style="color: var(--text-main)">Loading...</span>
       </div>
-      <h1>Clash Wars 👑</h1>
+      <h1>Clash of Clans War Info</h1>
     </header>
 
     <section class="filter-card">
-      <div class="filter-group-title">Filters</div>
+      <div class="filter-group-title">War Filters</div>
       <div class="filter-row-group">
+        <!-- Type -->
         <div class="filter-block">
-          <div class="filter-label">Type</div>
+          <div class="filter-label">Clan Type</div>
           <div class="pill-row" id="type-filters">
             <button class="pill active" data-value="all">All</button>
             <button class="pill" data-value="open">Open</button>
-            <button class="pill" data-value="inviteOnly">Invite</button>
+            <button class="pill" data-value="inviteOnly">Invite Only</button>
             <button class="pill" data-value="closed">Closed</button>
           </div>
         </div>
 
+        <!-- War State -->
         <div class="filter-block">
-          <div class="filter-label">State</div>
+          <div class="filter-label">War Status</div>
           <div class="pill-row" id="state-filters">
             <button class="pill active" data-value="all">All</button>
-            <button class="pill" data-value="inWar">War</button>
+            <button class="pill" data-value="inWar">In War</button>
             <button class="pill" data-value="preparation">Prep</button>
-            <button class="pill" data-value="notInWar">None</button>
+            <button class="pill" data-value="notInWar">Not In War</button>
           </div>
         </div>
 
-        <div class="filter-block" style="max-width: 80px;">
-          <div class="filter-label">End(h)</div>
-          <input id="hours-input" class="input-field" type="number" />
+        <!-- Numeric Inputs -->
+        <div class="filter-block">
+          <div class="filter-label">Ended (Hrs Ago)</div>
+          <input id="hours-input" class="input-field" type="number" placeholder="Exact hours" />
         </div>
-        <div class="filter-block" style="max-width: 80px;">
-          <div class="filter-label">Size</div>
-          <input id="war-size-input" class="input-field" type="number" />
+        <div class="filter-block">
+          <div class="filter-label">War Size</div>
+          <input id="war-size-input" class="input-field" type="number" placeholder="e.g. 50" />
+        </div>
+      </div>
+
+      <div class="filter-group-title">Raid Filters</div>
+      <div class="filter-row-group">
+        <!-- Raid State -->
+        <div class="filter-block">
+          <div class="filter-label">Raid Status</div>
+          <div class="pill-row" id="raid-filters">
+            <button class="pill active" data-value="all">All</button>
+            <button class="pill" data-value="ongoing">Ongoing</button>
+            <button class="pill" data-value="ended">Ended</button>
+          </div>
+        </div>
+
+        <!-- Raid Numeric -->
+        <div class="filter-block">
+          <div class="filter-label">Min Reward</div>
+          <input id="raid-reward-input" class="input-field" type="number" placeholder="e.g. 1500" />
+        </div>
+        <div class="filter-block">
+          <div class="filter-label">Min Completed</div>
+          <input id="raid-completed-input" class="input-field" type="number" placeholder="e.g. 45" />
         </div>
       </div>
 
       <div class="filter-actions">
-        <button id="apply-btn" class="btn btn-primary">Apply</button>
+        <button id="apply-btn" class="btn btn-primary">Apply Filters</button>
         <button id="clear-btn" class="btn btn-ghost">Clear</button>
-        <div class="count-pill"><span id="row-count">0</span> Clans</div>
+        <button id="download-btn" class="btn btn-ghost">Export CSV</button>
+        <div class="count-pill">Records: <span id="row-count">0</span></div>
       </div>
     </section>
-  </div>
 
-  <div class="table-wrapper">
-    <table id="clan-table">
-      <thead>
-        <tr>
-          <!-- Sticky Left Column -->
-          <th class="sortable text-left" data-key="name" style="min-width: 140px; padding-left:10px;">Clan</th>
-          <th>Link</th>
-          <th class="sortable" data-key="type">Type</th>
-          <th class="sortable" data-key="clanLevel">Lvl</th>
-          <th class="sortable" data-key="warWins">Wins</th>
-          <th class="sortable" data-key="warWinStreak">Strk</th>
-          <th class="sortable" data-key="warLeague">League</th>
-          <th class="sortable" data-key="members">Mem</th>
-          <th class="sortable" data-key="teamSize">Size</th>
-          <th class="sortable" data-key="end_time">Hrs</th>
-          <th class="sortable" data-key="state">War</th>
-          <th class="sortable" data-key="raidState">Raid</th>
-          <th class="sortable" data-key="raidTotalReward">R.Gold</th>
-          <th class="sortable" data-key="raidsCompleted">R.Done</th>
-          <th class="th-col-cell">TH Comp</th>
-          <th class="th-col-cell">Opp TH</th>
-        </tr>
-      </thead>
-      <tbody id="clan-tbody">
-        <!-- JS Populated -->
-      </tbody>
-    </table>
+    <div class="table-container">
+      <table id="clan-table">
+        <thead>
+          <tr>
+            <th class="sortable text-left" data-key="name">Clan Name</th>
+            <th>Profile</th>
+            <th class="sortable" data-key="type">Type</th>
+            <th class="sortable" data-key="clanLevel">Lvl</th>
+            <th class="sortable" data-key="warWins">Wins</th>
+            <th class="sortable" data-key="warWinStreak">Streak</th>
+            <th class="sortable" data-key="warLeague">League</th>
+            <th class="sortable" data-key="members">Mem</th>
+            <th class="sortable" data-key="teamSize">Size</th>
+            <th class="sortable" data-key="end_time">Hrs Ago</th>
+            <th class="sortable" data-key="state">State</th>
+            <th class="sortable" data-key="raidState">Raid</th>
+            <th class="sortable" data-key="raidTotalReward">Reward</th>
+            <th class="sortable" data-key="raidsCompleted">Comp</th>
+            <th>TH Comp</th>
+            <th>Opponent TH</th>
+          </tr>
+        </thead>
+        <tbody id="clan-tbody">
+          <!-- JS Populated -->
+        </tbody>
+      </table>
+    </div>
   </div>
 
   <script>
@@ -394,19 +454,22 @@
       try {
         const resp = await fetch('clans.json');
         const json = await resp.json();
+        
         if (Array.isArray(json)) {
           allClans = json;
-          document.getElementById('last-updated').textContent = new Date().toLocaleTimeString();
+          document.getElementById('last-updated').textContent = new Date().toLocaleString();
         } else {
           allClans = json.clans || [];
-          document.getElementById('last-updated').textContent = json.updated || "-";
+          document.getElementById('last-updated').textContent = json.updated || "Unknown";
         }
         filterAndRender();
       } catch (err) {
         console.error(err);
+        document.getElementById('last-updated').textContent = "Error Loading clans.json";
       }
     }
 
+    // Helper to get active pill values from a container
     function getActivePills(id) {
       return Array.from(document.querySelectorAll(`#${id} .pill.active`)).map(el => el.dataset.value);
     }
@@ -414,14 +477,44 @@
     function filterAndRender() {
       const typeFilter = getActivePills('type-filters');
       const stateFilter = getActivePills('state-filters');
+      const raidFilter = getActivePills('raid-filters');
+
       const hoursVal = document.getElementById('hours-input').value;
       const sizeVal = document.getElementById('war-size-input').value;
+      
+      const raidRewardVal = document.getElementById('raid-reward-input').value;
+      const raidCompVal = document.getElementById('raid-completed-input').value;
 
       displayClans = allClans.filter(c => {
-        if (!typeFilter.includes('all') && !typeFilter.some(t => t.toLowerCase() === (c.type || "").toLowerCase())) return false;
-        if (!stateFilter.includes('all') && !stateFilter.some(val => val.toLowerCase() === (c.state || "").toLowerCase())) return false;
+        // Type
+        if (!typeFilter.includes('all')) {
+          if (!typeFilter.some(t => t.toLowerCase() === (c.type || "").toLowerCase())) return false;
+        }
+        
+        // War State
+        if (!stateFilter.includes('all')) {
+          const s = (c.state || "").toLowerCase();
+          if (!stateFilter.some(val => val.toLowerCase() === s)) return false;
+        }
+
+        // Raid State
+        if (!raidFilter.includes('all')) {
+          const r = (c.raidState || "none").toLowerCase();
+          if (!raidFilter.some(val => val.toLowerCase() === r)) return false;
+        }
+
+        // Hours (Exact match logic from before)
         if (hoursVal && parseFloat(c.end_time) != parseFloat(hoursVal)) return false;
+
+        // Size
         if (sizeVal && parseInt(c.teamSize) != parseInt(sizeVal)) return false;
+
+        // Raid Reward (Min)
+        if (raidRewardVal && (c.raidTotalReward || 0) < parseFloat(raidRewardVal)) return false;
+
+        // Raid Completed (Min)
+        if (raidCompVal && (c.raidsCompleted || 0) < parseFloat(raidCompVal)) return false;
+
         return true;
       });
 
@@ -432,13 +525,22 @@
     function sortData() {
       const { key, dir } = sortState;
       const mul = dir === 'asc' ? 1 : -1;
+
       displayClans.sort((a, b) => {
-        let valA = a[key]; let valB = b[key];
+        let valA = a[key];
+        let valB = b[key];
+
         if (valA === valB) return 0;
-        if (valA == null) return 1; if (valB == null) return -1;
-        if (typeof valA === 'number' && typeof valB === 'number') return (valA - valB) * mul;
+        if (valA == null) return 1; 
+        if (valB == null) return -1;
+
+        if (typeof valA === 'number' && typeof valB === 'number') {
+          return (valA - valB) * mul;
+        }
         return String(valA).localeCompare(String(valB)) * mul;
       });
+
+      // Update headers UI
       document.querySelectorAll('th.sortable').forEach(th => {
         th.removeAttribute('data-sort-direction');
         if (th.dataset.key === key) th.setAttribute('data-sort-direction', dir);
@@ -452,20 +554,23 @@
 
       displayClans.forEach(c => {
         const tr = document.createElement('tr');
-        
-        // Name (Left Sticky)
+
+        // Clan Name/Tag
         const nameCell = document.createElement('td');
         nameCell.className = 'text-left';
-        nameCell.style.paddingLeft = '10px';
-        nameCell.innerHTML = `<span class="clan-name">${c.name || "Unknown"}</span><span class="clan-tag">${c.tag || ""}</span>`;
+        nameCell.innerHTML = `
+          <span class="clan-name">${c.name || "Unknown"}</span>
+          <span class="clan-tag">${c.tag || ""}</span>
+        `;
         tr.appendChild(nameCell);
 
         // Link
         const linkCell = document.createElement('td');
         const tagClean = c.tag ? c.tag.replace('#', '') : '';
-        linkCell.innerHTML = `<a href="https://link.clashofclans.com/en?action=OpenClanProfile&tag=${tagClean}" class="profile-btn">Open</a>`;
+        linkCell.innerHTML = `<a href="https://link.clashofclans.com/en?action=OpenClanProfile&tag=${tagClean}" target="_blank" class="profile-btn">Open</a>`;
         tr.appendChild(linkCell);
 
+        // Helper to create simple cells
         const createCell = (txt) => {
           const td = document.createElement('td');
           td.textContent = (txt !== null && txt !== undefined) ? txt : '-';
@@ -481,7 +586,7 @@
         createCell(c.teamSize);
         createCell(typeof c.end_time === 'number' ? c.end_time.toFixed(1) : '-');
 
-        // State
+        // War State Pill
         const stateTd = document.createElement('td');
         let stClass = 'st-not';
         if (c.state === 'inWar') stClass = 'st-inwar';
@@ -489,7 +594,7 @@
         stateTd.innerHTML = `<span class="status-pill ${stClass}">${c.state || '-'}</span>`;
         tr.appendChild(stateTd);
 
-        // Raid State
+        // Raid State Pill
         const raidStTd = document.createElement('td');
         let rStClass = 'st-not';
         if (c.raidState === 'ongoing') rStClass = 'st-inwar'; 
@@ -500,8 +605,10 @@
         createCell(c.raidTotalReward);
         createCell(c.raidsCompleted);
 
-        // TH Comps (with class for min-width)
+        // TH Comp
         tr.appendChild(createThCell(c.th_comp));
+        
+        // Opp TH Comp
         tr.appendChild(createThCell(c.opp_th_comp));
 
         tbody.appendChild(tr);
@@ -510,37 +617,54 @@
 
     function createThCell(compStr) {
       const td = document.createElement('td');
-      td.className = 'th-col-cell'; // Apply class for min-width
-      if (!compStr) { td.textContent = '-'; return td; }
+      if (!compStr) {
+        td.textContent = '-';
+        return td;
+      }
+      
       const container = document.createElement('div');
       container.className = 'th-container';
-      compStr.split(' ').forEach(p => {
+      
+      // Splits string like "18:2 17:5"
+      const parts = compStr.split(' ');
+      parts.forEach(p => {
         if (!p.includes(':')) return;
         const [lvl, count] = p.split(':');
+        
         const span = document.createElement('span');
         span.className = `th-badge th-${lvl}`;
+        if(parseInt(lvl) < 13) span.classList.add('th-rest');
         span.textContent = `${lvl}:${count}`;
+        
         container.appendChild(span);
       });
+      
       td.appendChild(container);
       return td;
     }
 
+    // --- Events ---
+    
+    // Pill toggling
     document.querySelectorAll('.pill').forEach(btn => {
       btn.addEventListener('click', (e) => {
         const group = e.target.parentElement;
         const val = e.target.dataset.value;
+
         if (val === 'all') {
           group.querySelectorAll('.pill').forEach(p => p.classList.remove('active'));
           e.target.classList.add('active');
         } else {
           e.target.classList.toggle('active');
           group.querySelector('[data-value="all"]').classList.remove('active');
-          if (group.querySelectorAll('.pill.active').length === 0) group.querySelector('[data-value="all"]').classList.add('active');
+          if (group.querySelectorAll('.pill.active').length === 0) {
+            group.querySelector('[data-value="all"]').classList.add('active');
+          }
         }
       });
     });
 
+    // Sort click
     document.querySelectorAll('th.sortable').forEach(th => {
       th.addEventListener('click', () => {
         const key = th.dataset.key;
@@ -555,7 +679,9 @@
       });
     });
 
+    // Filter Actions
     document.getElementById('apply-btn').addEventListener('click', filterAndRender);
+    
     document.getElementById('clear-btn').addEventListener('click', () => {
       document.querySelectorAll('.pill').forEach(p => p.classList.remove('active'));
       document.querySelectorAll('[data-value="all"]').forEach(p => p.classList.add('active'));
@@ -563,6 +689,22 @@
       filterAndRender();
     });
 
+    document.getElementById('download-btn').addEventListener('click', () => {
+      if(!displayClans.length) return;
+      const headers = Object.keys(displayClans[0]).join(',');
+      let csv = headers + '\n';
+      displayClans.forEach(row => {
+        csv += Object.values(row).map(v => `"${v}"`).join(',') + '\n';
+      });
+      const blob = new Blob([csv], { type: 'text/csv' });
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'clans.csv';
+      a.click();
+    });
+
+    // Init
     init();
   </script>
 </body>
