@@ -9,7 +9,6 @@
   <link rel="icon" type="image/png" href="icons/icon-512.png">
   <meta name="theme-color" content="#05091a">
 
-  <!-- Custom Clash fonts (put files in /fonts folder of repo) -->
   <style>
     @font-face {
       font-family: "ClashRegular";
@@ -46,14 +45,26 @@
       background: radial-gradient(circle at top, #111d3d 0, var(--bg) 55%);
       color: var(--text-main);
       -webkit-font-smoothing: antialiased;
+      overflow-y: auto;
       overflow-x: hidden;
     }
 
-    /* full width, small 8px side margin */
+    /* darken page scrollbar */
+    body::-webkit-scrollbar {
+      width: 8px;
+    }
+    body::-webkit-scrollbar-track {
+      background: #020617;
+    }
+    body::-webkit-scrollbar-thumb {
+      background: #1f2937;
+      border-radius: 999px;
+    }
+
     .page-shell {
       width: 100%;
       margin: 0;
-      padding: 1rem 8px 0.5rem;
+      padding: 1rem 8px 1.5rem;
     }
 
     header {
@@ -271,25 +282,28 @@
     .table-wrapper {
       width: 100%;
       overflow-x: auto;
-      overflow-y: visible;   /* page handles vertical scroll */
+      overflow-y: auto;
       -webkit-overflow-scrolling: touch;
       border-radius: 0 0 12px 12px;
-      border: 1px solid rgba(30, 64, 175, .7);
+      border: 1px solid rgba(30, 64, 175, .5);
       box-shadow:
-        inset 0 1px 0 rgba(148, 163, 184, .12),
+        inset 0 1px 0 rgba(148, 163, 184, .08),
         0 8px 25px rgba(15, 23, 42, .9);
       background: radial-gradient(circle at top left, #111827 0, #020617 55%);
+      max-height: calc(100vh - 260px); /* leave room for filters/header */
+      position: relative;
     }
 
-    /* subtle horizontal scrollbar styling (where supported) */
+    /* dark, subtle scrollbars for table */
     .table-wrapper::-webkit-scrollbar {
-      height: 6px;
+      height: 8px;
+      width: 8px;
     }
     .table-wrapper::-webkit-scrollbar-track {
-      background: rgba(15,23,42,1);
+      background: #020617;
     }
     .table-wrapper::-webkit-scrollbar-thumb {
-      background: rgba(55,65,81,1);
+      background: #1f2937;
       border-radius: 999px;
     }
 
@@ -305,28 +319,25 @@
       background: rgba(15, 23, 42, .96);
     }
     thead th {
-      text-align: center; /* center by default */
+      text-align: center;
       padding: .55rem .35rem;
       font-weight: 500;
-      color: #e5e7eb;
+      color: #9ca3af;
       text-transform: uppercase;
       letter-spacing: .16em;
       font-size: .7rem;
-      border-bottom: 1px solid rgba(55, 65, 81, 1);
-      border-right: 1px solid rgba(55, 65, 81, 1);  /* visible column grid */
+      border-bottom: 1px solid rgba(31, 41, 55, 1);
+      border-right: 1px solid rgba(31, 41, 55, 1);
       position: sticky;
       top: 0;
       z-index: 5;
-      background: rgba(15, 23, 42, .98);
+      background: rgba(15, 23, 42, .96);
+    }
+    thead th:first-child {
+      text-align: left;
     }
     thead th:last-child {
       border-right: none;
-    }
-
-    /* keep first header left aligned for readability */
-    thead th:first-child {
-      text-align: left;
-      padding-left: .7rem;
     }
 
     th.sortable {
@@ -356,23 +367,20 @@
     }
     tbody td {
       padding: .45rem .35rem;
-      border-bottom: 1px solid rgba(31, 41, 55, .9);
-      border-right: 1px solid rgba(31, 41, 55, .9);  /* column grid */
+      border-bottom: 1px solid rgba(15, 23, 42, .95);
+      border-right: 1px solid rgba(15, 23, 42, .95);
       color: #e5e7eb;
-      vertical-align: top;
+      vertical-align: middle; /* center in cell */
       text-align: center;
+    }
+    tbody td:first-child {
+      text-align: left;
     }
     tbody td:last-child {
       border-right: none;
     }
     tbody tr:last-child td {
       border-bottom: none;
-    }
-
-    /* first col left aligned (name + tag) */
-    tbody td:first-child {
-      text-align: left;
-      padding-left: .7rem;
     }
 
     .clan-name {
@@ -451,13 +459,13 @@
       transform: translateY(-1px);
     }
 
-    /* widen TH columns so 4 badges fit row */
+    /* widen TH columns so badges clearly sit in each column */
     th:nth-child(15),
     td:nth-child(15),
     th:nth-child(16),
     td:nth-child(16) {
-      min-width: 170px;
-      max-width: 230px;
+      min-width: 190px;
+      max-width: 260px;
     }
 
     /* TH composition column styling */
@@ -482,9 +490,8 @@
       font-weight: 500;
       border: 1px solid rgba(148, 163, 184, .55);
       background: rgba(15, 23, 42, .95);
-      flex: 0 0 calc(25% - 3px);  /* 4 per row */
+      flex: 0 0 calc(25% - 3px);  /* aim for 4 per row */
       box-sizing: border-box;
-      text-align: center;
     }
 
     /* Level colors */
@@ -515,6 +522,7 @@
       }
       .table-wrapper {
         border-radius: 0 0 10px 10px;
+        max-height: calc(100vh - 240px);
       }
     }
   </style>
@@ -536,7 +544,6 @@
     </header>
 
     <section class="filter-card">
-      <!-- first row: type / war state / last war hours / war size -->
       <div class="filter-row-group">
         <div class="filter-block">
           <div class="filter-label">Type</div>
@@ -572,7 +579,6 @@
         </div>
       </div>
 
-      <!-- second row: raid filters -->
       <div class="filter-row-group" style="margin-top: 0.9rem;">
         <div class="filter-block">
           <div class="filter-label">Raid state</div>
@@ -630,9 +636,7 @@
               <th>Opp TH comp</th>
             </tr>
           </thead>
-          <tbody id="clan-tbody">
-            <!-- filled by JS -->
-          </tbody>
+          <tbody id="clan-tbody"></tbody>
         </table>
       </div>
     </section>
@@ -644,20 +648,15 @@
     let sortConfig = { key: "warWinStreak", direction: "desc" };
 
     async function loadClans() {
-      const res = await fetch("clans.json", {
-        cache: "no-store"
-      });
-
+      const res = await fetch("clans.json", { cache: "no-store" });
       const data = await res.json();
 
       let updatedText = "";
 
       if (Array.isArray(data)) {
-        // Old format
         clans = data;
         updatedText = "Loaded at: " + new Date().toLocaleString();
       } else if (data && Array.isArray(data.clans)) {
-        // NEW format
         clans = data.clans;
         updatedText = "Updated: " + data.updated;
       } else {
@@ -740,9 +739,10 @@
             sortConfig.direction = sortConfig.direction === "asc" ? "desc" : "asc";
           } else {
             sortConfig.key = key;
-            sortConfig.direction = (key === "warWinStreak" || key === "warWins" || key === "raidTotalReward" || key === "raidsCompleted")
-              ? "desc"
-              : "asc";
+            sortConfig.direction =
+              (key === "warWinStreak" || key === "warWins" || key === "raidTotalReward" || key === "raidsCompleted")
+                ? "desc"
+                : "asc";
           }
           applyFilters();
           updateSortHeaders();
@@ -752,11 +752,7 @@
 
     function renderThCompCell(td, value) {
       td.innerHTML = "";
-      if (
-        value == null ||
-        String(value).trim() === "" ||
-        String(value).toLowerCase() === "none"
-      ) {
+      if (!value) {
         td.textContent = "-";
         return;
       }
@@ -1052,6 +1048,5 @@
 
     loadClans();
   </script>
-
 </body>
 </html>
