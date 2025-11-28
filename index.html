@@ -271,8 +271,7 @@
     .table-wrapper {
       width: 100%;
       overflow-x: auto;
-      overflow-y: auto;        /* vertical scroll inside table */
-      max-height: calc(100vh - 260px); /* so header can stick */
+      overflow-y: visible;   /* page handles vertical scroll */
       -webkit-overflow-scrolling: touch;
       border-radius: 0 0 12px 12px;
       border: 1px solid rgba(30, 64, 175, .7);
@@ -280,6 +279,18 @@
         inset 0 1px 0 rgba(148, 163, 184, .12),
         0 8px 25px rgba(15, 23, 42, .9);
       background: radial-gradient(circle at top left, #111827 0, #020617 55%);
+    }
+
+    /* subtle horizontal scrollbar styling (where supported) */
+    .table-wrapper::-webkit-scrollbar {
+      height: 6px;
+    }
+    .table-wrapper::-webkit-scrollbar-track {
+      background: rgba(15,23,42,1);
+    }
+    .table-wrapper::-webkit-scrollbar-thumb {
+      background: rgba(55,65,81,1);
+      border-radius: 999px;
     }
 
     table {
@@ -294,7 +305,7 @@
       background: rgba(15, 23, 42, .96);
     }
     thead th {
-      text-align: center; /* center all headers by default */
+      text-align: center; /* center by default */
       padding: .55rem .35rem;
       font-weight: 500;
       color: #e5e7eb;
@@ -457,7 +468,7 @@
       color: #e5e7eb;
       display: flex;
       flex-wrap: wrap;
-      gap: 4px;
+      gap: 3px;
       justify-content: flex-start;
     }
 
@@ -471,8 +482,7 @@
       font-weight: 500;
       border: 1px solid rgba(148, 163, 184, .55);
       background: rgba(15, 23, 42, .95);
-      flex: 0 0 25%;      /* 4 per row */
-      max-width: 25%;
+      flex: 0 0 calc(25% - 3px);  /* 4 per row */
       box-sizing: border-box;
       text-align: center;
     }
@@ -505,7 +515,6 @@
       }
       .table-wrapper {
         border-radius: 0 0 10px 10px;
-        max-height: calc(100vh - 220px);
       }
     }
   </style>
@@ -743,7 +752,11 @@
 
     function renderThCompCell(td, value) {
       td.innerHTML = "";
-      if (!value) {
+      if (
+        value == null ||
+        String(value).trim() === "" ||
+        String(value).toLowerCase() === "none"
+      ) {
         td.textContent = "-";
         return;
       }
