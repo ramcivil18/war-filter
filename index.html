@@ -4,686 +4,1064 @@
   <meta charset="utf-8" />
   <title>Clash of Clans — War Clans</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="theme-color" content="#ffffff">
 
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" type="image/png" href="icons/icon-512.png">
+  <meta name="theme-color" content="#05091a">
+
+  <!-- Custom Clash fonts (put files in /fonts folder of repo) -->
   <style>
-    /* --- FONTS --- */
-    /* Ensure 'Supercell-Magic.ttf' exists in a 'fonts' folder next to this file */
     @font-face {
-      font-family: "ClashFont";
-      src: url("fonts/Supercell-Magic.ttf") format("truetype");
+      font-family: "ClashRegular";
+      src: url("fonts/Clash_Regular.otf") format("opentype");
       font-weight: 400;
       font-style: normal;
     }
+    @font-face {
+      font-family: "ClashBold";
+      src: url("fonts/Clash_Bold.otf") format("opentype");
+      font-weight: 700;
+      font-style: normal;
+    }
 
-    /* --- ROYAL THEME VARIABLES --- */
     :root {
-      --bg-page: #f8f9fa;
-      --bg-card: #ffffff;
-      --text-main: #1e293b;      /* Dark slate */
-      --text-subtle: #64748b;    /* Muted slate */
-      
-      --royal-blue: #1e3a8a;     /* Deep Royal Blue */
-      --royal-gold: #d97706;     /* Dark Gold/Bronze */
-      --royal-gold-light: #fbbf24;
-      
-      --grid-line: #e2e8f0;      /* Light gray borders */
-      
-      --pill-bg: #f1f5f9;
-      --pill-border: #cbd5e1;
-      --pill-active-bg: var(--royal-blue);
-      --pill-active-text: #ffffff;
+      --bg: #05091a;
+      --bg-card: #050c1f;
+      --bg-card-soft: #060f23;
+      --accent: #38d46b;
+      --accent-soft: #1b6b3a;
+      --pill-bg: #0d172a;
+      --pill-bg-active: #1e293b;
+      --pill-border: #1f2937;
+      --text-main: #e5edf9;
+      --text-subtle: #8b9bb8;
+      --pill-radius: 999px;
     }
 
     * { box-sizing: border-box; }
 
     body {
       margin: 0;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-      background-color: var(--bg-page);
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif;
+      background: radial-gradient(circle at top, #111d3d 0, var(--bg) 55%);
       color: var(--text-main);
-      overflow-y: auto; /* Allow window scrolling */
+      -webkit-font-smoothing: antialiased;
       overflow-x: hidden;
+      overflow-y: auto; /* page scroll only */
     }
 
-    /* --- PAGE LAYOUT --- */
+    /* dark scrollbars so they don't look ugly white */
+    body::-webkit-scrollbar {
+      width: 10px;
+      height: 10px;
+    }
+    body::-webkit-scrollbar-track {
+      background: #020617;
+    }
+    body::-webkit-scrollbar-thumb {
+      background: #1f2937;
+      border-radius: 999px;
+    }
+    body::-webkit-scrollbar-thumb:hover {
+      background: #374151;
+    }
+
+    /* full width, small 8px side margin */
     .page-shell {
       width: 100%;
-      max-width: 100%;
-      margin: 0 auto;
-      padding: 1.5rem 20px 3rem;
+      margin: 0;
+      padding: 1rem 8px 0.5rem;
     }
 
-    /* --- HEADER --- */
     header {
       display: flex;
       flex-direction: column;
-      gap: 0.5rem;
-      margin-bottom: 2rem;
-      border-bottom: 3px solid var(--royal-gold);
-      padding-bottom: 1rem;
-    }
-
-    h1 {
-      margin: 0;
-      font-family: "ClashFont", sans-serif; /* Custom Font */
-      font-size: clamp(1.5rem, 3.5vw, 2.5rem); /* Adjusted size for bulky font */
-      text-transform: uppercase;
-      color: var(--royal-blue);
-      letter-spacing: 1px;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      text-shadow: 2px 2px 0px rgba(0,0,0,0.1);
+      gap: 0.75rem;
+      margin-bottom: 1.3rem;
     }
 
     .badge-row {
       display: inline-flex;
       align-items: center;
       gap: .5rem;
-      font-size: .8rem;
-      font-weight: 700;
+      padding: .35rem .85rem;
+      border-radius: 999px;
+      background: rgba(9, 15, 35, .85);
+      box-shadow: 0 0 0 1px rgba(148, 163, 184, .16),
+                  0 10px 30px rgba(15, 23, 42, .8);
+      font-size: .75rem;
       text-transform: uppercase;
-      letter-spacing: .05em;
-      color: var(--royal-gold);
-      font-family: "ClashFont", sans-serif;
+      letter-spacing: .13em;
+      color: var(--text-subtle);
+      align-self: flex-start;
+    }
+    .badge-dot {
+      width: 8px; height: 8px;
+      border-radius: 999px;
+      background: #22c55e;
+      box-shadow: 0 0 8px #22c55e;
     }
 
-    /* --- FILTER CARD --- */
+    h1 {
+      margin: 0;
+      font-family: "ClashBold", system-ui, sans-serif;
+      font-size: clamp(1.4rem, 3.4vw, 2.2rem);
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      text-align: left;
+      background: linear-gradient(120deg, #f9df8a 0%, #f4b646 40%, #f7f2c6 65%, #f1962f 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      text-shadow:
+        0 2px 3px rgba(0,0,0,.6),
+        0 6px 18px rgba(0,0,0,.9);
+    }
+
+    .subtitle {
+      margin: .15rem 0 0;
+      font-size: .9rem;
+      color: var(--text-subtle);
+    }
+
+    /* Filter card */
     .filter-card {
-      background: var(--bg-card);
-      border-radius: 8px;
-      padding: 1.5rem;
-      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 
-                  0 10px 15px -3px rgba(0, 0, 0, 0.05);
-      border: 1px solid var(--grid-line);
-      margin-bottom: 2rem;
-    }
-
-    .filter-group-title {
-      font-family: "ClashFont", sans-serif;
-      color: var(--royal-blue);
-      font-size: 0.9rem;
-      margin-bottom: 0.8rem;
-      border-bottom: 1px solid var(--grid-line);
-      padding-bottom: 0.3rem;
-      width: 100%;
+      background: radial-gradient(circle at top left, #111c3b 0, var(--bg-card) 55%);
+      border-radius: 18px;
+      padding: 1rem .9rem 1.1rem;
+      box-shadow:
+        0 18px 45px rgba(15, 23, 42, .9),
+        0 0 0 1px rgba(148, 163, 184, .18);
+      margin-bottom: 1rem;
     }
 
     .filter-row-group {
       display: flex;
       flex-wrap: wrap;
-      gap: 1.5rem;
-      align-items: flex-end;
-      margin-bottom: 1.5rem;
+      gap: 1.2rem;
+      align-items: flex-start;
     }
 
-    .filter-block { flex: 1 1 160px; }
+    .filter-block {
+      flex: 1 1 210px;
+      min-width: 0;
+    }
 
     .filter-label {
-      font-size: 0.75rem;
-      font-weight: 700;
+      font-size: .8rem;
       text-transform: uppercase;
+      letter-spacing: .16em;
       color: var(--text-subtle);
-      margin-bottom: 0.4rem;
+      margin-bottom: .35rem;
     }
 
-    /* Pills */
-    .pill-row { display: flex; flex-wrap: wrap; gap: 0.4rem; }
-    
+    .pill-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: .5rem;
+    }
+
     .pill {
+      border-radius: var(--pill-radius);
+      padding: .35rem .9rem;
+      border: 1px solid var(--pill-border);
       background: var(--pill-bg);
-      border: 1px solid var(--pill-border);
-      color: var(--text-main);
-      padding: 0.4rem 0.9rem;
-      border-radius: 4px;
+      font-size: .8rem;
+      color: var(--text-subtle);
       cursor: pointer;
-      transition: 0.2s;
-      font-size: 0.85rem;
-      font-weight: 600;
+      transition: 120ms ease-out;
+      user-select: none;
+      white-space: nowrap;
     }
-    .pill:hover { background: #e2e8f0; }
-    .pill.active {
-      background: var(--pill-active-bg);
-      color: var(--pill-active-text);
-      border-color: var(--royal-blue);
-      box-shadow: 0 2px 4px rgba(30, 58, 138, 0.3);
-    }
-
-    /* Inputs */
-    .input-field {
-      width: 100%;
-      padding: 0.5rem 0.8rem;
-      background: #fff;
-      border: 1px solid var(--pill-border);
-      border-radius: 4px;
+    .pill:hover {
+      border-color: rgba(148, 163, 184, .6);
+      background: #111827;
       color: var(--text-main);
-      font-size: 0.9rem;
     }
-    .input-field:focus {
-      outline: none;
-      border-color: var(--royal-gold);
-      box-shadow: 0 0 0 2px rgba(217, 119, 6, 0.1);
+    .pill.active {
+      background: var(--pill-bg-active);
+      border-color: #38bdf8;
+      color: var(--text-main);
+      box-shadow: 0 0 0 1px rgba(56, 189, 248, .5);
     }
 
-    /* Actions */
+    .hours-input {
+      width: 100%;
+      padding: .6rem .9rem;
+      border-radius: 999px;
+      border: 1px solid var(--pill-border);
+      background: var(--pill-bg);
+      color: var(--text-main);
+      font-size: .9rem;
+      outline: none;
+    }
+    .hours-input::placeholder {
+      color: #64748b;
+    }
+    .hours-input:focus {
+      border-color: #38bdf8;
+      box-shadow: 0 0 0 1px rgba(56, 189, 248, .5), 0 0 0 999px rgba(15,23,42,.0);
+    }
+
     .filter-actions {
       display: flex;
-      align-items: center;
-      gap: 1rem;
-      margin-top: 1rem;
       flex-wrap: wrap;
-      padding-top: 1rem;
-      border-top: 1px dashed var(--grid-line);
+      gap: .6rem;
+      margin-top: 1rem;
+      align-items: center;
     }
 
     .btn {
-      padding: 0.7rem 1.5rem;
-      border-radius: 4px;
+      border-radius: 999px;
+      padding: .55rem 1.35rem;
       border: none;
-      font-family: "ClashFont", sans-serif;
-      font-size: 0.8rem;
-      text-transform: uppercase;
-      letter-spacing: 1px;
       cursor: pointer;
-      transition: transform 0.1s;
-      text-shadow: 1px 1px 0 rgba(0,0,0,0.2);
+      font-size: .9rem;
+      font-weight: 500;
+      transition: 120ms ease-out;
+      white-space: nowrap;
     }
-    .btn:active { transform: translateY(1px); }
 
     .btn-primary {
-      background: linear-gradient(to bottom, #d97706, #b45309);
-      color: #fff;
-      box-shadow: 0 4px 0 #92400e;
+      background: linear-gradient(135deg, var(--accent) 0%, #22c55e 55%, #4ade80 100%);
+      color: #022c12;
+      box-shadow:
+        0 10px 25px rgba(21, 128, 61, .7),
+        0 0 0 1px rgba(34, 197, 94, .7);
     }
+    .btn-primary:hover {
+      transform: translateY(-1px);
+      box-shadow:
+        0 14px 35px rgba(21, 128, 61, .85),
+        0 0 0 1px rgba(34, 197, 94, .9);
+    }
+
     .btn-ghost {
-      background: #fff;
-      border: 1px solid var(--royal-blue);
-      color: var(--royal-blue);
-      box-shadow: 0 4px 0 #e2e8f0;
-      text-shadow: none;
+      background: transparent;
+      color: var(--text-main);
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, .5);
+      padding-inline: 1.3rem;
+    }
+    .btn-ghost:hover {
+      background: rgba(15, 23, 42, .9);
     }
 
     .count-pill {
+      padding: .45rem 1rem;
+      border-radius: 999px;
+      background: rgba(15, 23, 42, .95);
+      border: 1px solid rgba(148, 163, 184, .4);
+      font-size: .8rem;
+      color: var(--text-subtle);
       margin-left: auto;
-      font-weight: bold;
-      color: var(--royal-blue);
-      font-size: 0.9rem;
-      font-family: monospace;
+    }
+    .count-pill span {
+      color: #4ade80;
+      font-weight: 600;
     }
 
-    /* --- TABLE STYLING --- */
-    
-    .table-container {
+    /* Clan table card */
+    .list-card {
+      background: linear-gradient(180deg, var(--bg-card-soft), #020617);
+      border-radius: 12px;
+      padding: 0.4rem 0 0.3rem;
+      box-shadow:
+        0 18px 50px rgba(15, 23, 42, .95),
+        0 0 0 1px rgba(30, 64, 175, .35);
+      margin: 0;
+    }
+
+    .list-header-title {
+      font-size: .9rem;
+      text-transform: uppercase;
+      letter-spacing: .18em;
+      color: var(--text-subtle);
+      margin: 0 0 .1rem .7rem;
+    }
+    .list-header-sub {
+      font-size: .8rem;
+      color: #64748b;
+      margin: 0 0 .5rem .7rem;
+    }
+
+    .table-wrapper {
       width: 100%;
-      /* This allows horizontal scroll if table is too wide, 
-         but lets the window handle vertical scroll for sticky headers */
-      overflow-x: auto;
-      border: 1px solid var(--royal-blue);
-      border-radius: 8px 8px 0 0;
-      background: #fff;
-      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
-      position: relative; /* Context for sticky */
+      overflow-x: auto;   /* horizontal scroll only */
+      overflow-y: visible;/* let page scroll handle vertical */
+      -webkit-overflow-scrolling: touch;
+      border-radius: 0 0 12px 12px;
+      border: 1px solid rgba(30, 64, 175, .5);
+      box-shadow:
+        inset 0 1px 0 rgba(148, 163, 184, .08),
+        0 8px 25px rgba(15, 23, 42, .9);
+      background: radial-gradient(circle at top left, #111827 0, #020617 55%);
+    }
+
+    .table-wrapper::-webkit-scrollbar {
+      height: 8px;
+    }
+    .table-wrapper::-webkit-scrollbar-track {
+      background: #020617;
+    }
+    .table-wrapper::-webkit-scrollbar-thumb {
+      background: #1f2937;
+      border-radius: 999px;
     }
 
     table {
       width: 100%;
-      border-collapse: collapse; /* Required for grid lines */
-      min-width: 1300px;
-      font-size: 0.85rem;
+      border-collapse: collapse;
+      min-width: 960px;
+      font-size: .82rem;
+      margin: 0;
     }
 
-    /* Sticky Header */
+    thead tr {
+      background: rgba(15, 23, 42, .96);
+    }
     thead th {
-      position: sticky;
-      top: 0;
-      z-index: 50;
-      background: var(--royal-blue); /* Opaque background to hide scrolling content */
-      color: #fff;
-      padding: 1.2rem 0.5rem;
+      text-align: center; /* center header text */
+      padding: .55rem .35rem;
+      font-weight: 500;
+      color: #9ca3af;
       text-transform: uppercase;
-      font-size: 0.7rem;
-      letter-spacing: 1px;
-      font-family: "ClashFont", sans-serif;
-      border: 1px solid #3b5594; /* Grid line for header */
+      letter-spacing: .16em;
+      font-size: .7rem;
+      border-bottom: 1px solid rgba(31, 41, 55, 1);
+      border-right: 1px solid rgba(31, 41, 55, 1);  /* mild grid line */
+      position: sticky;     /* sticky header */
+      top: 0;               /* stick to top of viewport */
+      z-index: 5;
+      background: rgba(15, 23, 42, .96);
+    }
+    /* Clan & Profile columns left-aligned */
+    thead th:nth-child(1),
+    thead th:nth-child(2) {
+      text-align: left;
+    }
+
+    thead th:last-child {
+      border-right: none;
+    }
+
+    th.sortable {
       cursor: pointer;
       user-select: none;
-      line-height: 1.2;
-      text-align: center;
     }
-    
-    thead th:hover {
-      background: #172554;
+    th.sortable::after {
+      content: "";
+      margin-left: 4px;
+      font-size: 0.65rem;
+      opacity: 0.3;
+    }
+    th.sortable[data-sort-direction="asc"]::after {
+      content: "▲";
+      opacity: 0.9;
+    }
+    th.sortable[data-sort-direction="desc"]::after {
+      content: "▼";
+      opacity: 0.9;
     }
 
-    /* Sort Indicators */
-    th.sortable::after { content: " ↕"; opacity: 0.4; font-family: sans-serif; }
-    th.sortable[data-sort-direction="asc"]::after { content: " ▲"; opacity: 1; color: var(--royal-gold-light); }
-    th.sortable[data-sort-direction="desc"]::after { content: " ▼"; opacity: 1; color: var(--royal-gold-light); }
-
-    /* Body Cells */
+    tbody tr:nth-child(2n) {
+      background: rgba(15, 23, 42, .92);
+    }
+    tbody tr:nth-child(2n+1) {
+      background: rgba(15, 23, 42, .98);
+    }
     tbody td {
-      padding: 0.75rem 0.5rem;
-      border: 1px solid var(--grid-line); /* Grid lines for cells */
-      color: var(--text-main);
-      vertical-align: middle;
-      text-align: center; /* Requirement: Center Align */
+      padding: .45rem .35rem;
+      border-bottom: 1px solid rgba(15, 23, 42, .95);
+      border-right: 1px solid rgba(15, 23, 42, .95);
+      color: #e5e7eb;
+      vertical-align: top;
+      text-align: center; /* center body cells by default */
+    }
+    tbody td:nth-child(1),
+    tbody td:nth-child(2) {
+      text-align: left;
     }
 
-    /* Zebra Striping */
-    tbody tr:nth-child(even) { background-color: #f8fafc; }
-    tbody tr:hover { background-color: #e0f2fe; }
+    tbody td:last-child {
+      border-right: none;
+    }
+    tbody tr:last-child td {
+      border-bottom: none;
+    }
 
-    /* Specific Columns */
-    .text-left { text-align: left !important; }
-    
     .clan-name {
-      font-weight: 700;
-      font-size: 0.95rem;
-      color: var(--royal-blue);
-      display: block;
-      margin-bottom: 2px;
+      font-weight: 500;
     }
     .clan-tag {
-      font-size: 0.75rem;
-      color: var(--text-subtle);
-      font-family: monospace;
+      font-size: .75rem;
+      color: #6b7280;
+    }
+
+    .pill-label {
+      border-radius: 999px;
+      padding: .15rem .7rem;
+      font-size: .72rem;
+      border: 1px solid rgba(148, 163, 184, .5);
+      background: rgba(15, 23, 42, .9);
+      color: #e5e7eb;
+      display: inline-flex;
+      align-items: center;
+      gap: .25rem;
+    }
+    .pill-label.open {
+      border-color: rgba(74, 222, 128, .8);
+      color: #bbf7d0;
+      background: rgba(22, 101, 52, .5);
+    }
+    .pill-label.invite {
+      border-color: rgba(59, 130, 246, .9);
+      color: #bfdbfe;
+      background: rgba(30, 64, 175, .6);
+    }
+    .pill-label.closed {
+      border-color: rgba(248, 113, 113, .85);
+      color: #fecaca;
+      background: rgba(127, 29, 29, .7);
+    }
+
+    .pill-label.state-inwar {
+      border-color: rgba(74, 222, 128, .85);
+      background: rgba(21, 128, 61, .7);
+      color: #bbf7d0;
+    }
+    .pill-label.state-prep {
+      border-color: rgba(129, 140, 248, .9);
+      background: rgba(49, 46, 129, .8);
+      color: #e0e7ff;
+    }
+    .pill-label.state-not {
+      border-color: rgba(148, 163, 184, .8);
+      background: rgba(30, 64, 75, .8);
+      color: #e5e7eb;
+    }
+    .pill-label.state-ended {
+      border-color: rgba(248, 250, 252, .7);
+      background: rgba(15, 23, 42, .9);
+      color: #e5e7eb;
     }
 
     .profile-btn {
-      display: inline-block;
-      background: #fff;
-      color: var(--royal-blue);
-      border: 1px solid var(--royal-blue);
+      border-radius: 999px;
+      border: 1px solid rgba(129, 140, 248, .8);
+      padding: .25rem .75rem;
+      font-size: .75rem;
+      background: radial-gradient(circle at top, rgba(129, 140, 248, .35), rgba(15, 23, 42, 1));
+      color: #c7d2fe;
       text-decoration: none;
-      padding: 4px 12px;
-      border-radius: 99px;
-      font-size: 0.65rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      font-family: "ClashFont", sans-serif;
+      display: inline-flex;
+      align-items: center;
+      gap: .25rem;
+      transition: 120ms ease-out;
     }
     .profile-btn:hover {
-      background: var(--royal-blue);
-      color: white;
+      box-shadow:
+        0 0 0 1px rgba(129, 140, 248, .9),
+        0 8px 20px rgba(15, 23, 42, .9);
+      transform: translateY(-1px);
     }
 
-    /* Status Pills */
-    .status-pill {
-      padding: 3px 8px;
-      border-radius: 4px;
-      font-size: 0.7rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      border: 1px solid transparent;
+    /* widen TH columns so 4 badges fit row */
+    th:nth-child(15),
+    td:nth-child(15),
+    th:nth-child(16),
+    td:nth-child(16) {
+      min-width: 170px;
+      max-width: 220px;
     }
-    .st-inwar { background: #dcfce7; color: #166534; border-color: #86efac; }
-    .st-prep { background: #dbeafe; color: #1e40af; border-color: #93c5fd; }
-    .st-not { background: #fee2e2; color: #991b1b; border-color: #fca5a5; }
 
-    /* TH Badges */
-    .th-container {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
+    /* TH composition column styling - use 4-column grid so it doesn’t jump between 3/4 per row */
+    .th-comp {
+      white-space: normal;
+      font-size: 0.72rem;
+      line-height: 1.2;
+      color: #e5e7eb;
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
       gap: 3px;
-      max-width: 250px;
-      margin: 0 auto;
+      align-items: stretch;
+      justify-items: center;
     }
+
     .th-badge {
-      background: #fff;
-      border: 1px solid #cbd5e1;
-      border-radius: 3px;
-      padding: 2px 5px;
-      font-size: 0.75rem;
-      font-weight: 700;
-      color: #334155;
-      box-shadow: 0 1px 1px rgba(0,0,0,0.05);
-      white-space: nowrap;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2px 6px;
+      border-radius: 999px;
+      font-size: 0.7rem;
+      font-weight: 500;
+      border: 1px solid rgba(148, 163, 184, .55);
+      background: rgba(15, 23, 42, .95);
+      width: 100%;         /* fill grid cell */
+      box-sizing: border-box;
     }
-    .th-18 { background: #fef9c3; border-color: #eab308; color: #854d0e; }
-    .th-17 { background: #ffedd5; border-color: #f97316; color: #9a3412; }
-    .th-16 { background: #fee2e2; border-color: #ef4444; color: #991b1b; }
-    
+
+    /* Level colors */
+    .th-lv-18 { background: radial-gradient(circle at top, #facc15, #92400e); color: #fef9c3; }
+    .th-lv-17 { background: radial-gradient(circle at top, #fb923c, #7c2d12); color: #ffedd5; }
+    .th-lv-16 { background: radial-gradient(circle at top, #f97316, #7c2d12); color: #ffedd5; }
+    .th-lv-15 { background: radial-gradient(circle at top, #a855f7, #4c1d95); color: #f3e8ff; }
+    .th-lv-14 { background: radial-gradient(circle at top, #38bdf8, #1d4ed8); color: #e0f2fe; }
+    .th-lv-13 { background: radial-gradient(circle at top, #22c55e, #166534); color: #dcfce7; }
+    .th-lv-12 { background: radial-gradient(circle at top, #2dd4bf, #115e59); color: #ccfbf1; }
+    .th-lv-11 { background: radial-gradient(circle at top, #9ca3af, #111827); color: #f9fafb; }
+
+    /* intensity by count */
+    .th-int-1 { opacity: 0.95; }
+    .th-int-2 { box-shadow: 0 0 4px rgba(148, 163, 184, .6); }
+    .th-int-3 { box-shadow: 0 0 6px rgba(248, 250, 252, .7); border-color: rgba(248, 250, 252, .8); }
+    .th-int-4 { box-shadow: 0 0 9px rgba(250, 250, 250, 1); border-color: rgba(250, 250, 250, 1); }
+
     @media (max-width: 768px) {
-      .page-shell { padding: 1rem 10px; }
-      h1 { font-size: 1.4rem; }
-      .filter-card { padding: 1rem; }
+      .page-shell {
+        padding-inline: 4px;
+      }
+      header {
+        margin-bottom: 1rem;
+      }
+      .filter-card {
+        padding-inline: .7rem;
+      }
+      .table-wrapper {
+        border-radius: 0 0 10px 10px;
+      }
     }
   </style>
 </head>
 <body>
-
   <div class="page-shell">
     <header>
       <div class="badge-row">
-        <span>Last Updated:</span>
-        <span id="last-updated" style="color: var(--text-main)">Loading...</span>
+        <span class="badge-dot"></span>
+        <span>Live war scouting</span>
+        <span>•</span>
+        <span id="last-updated">JSON updated: -</span>
       </div>
-      <h1>Clash of Clans Intel</h1>
+      <h1>Clash of Clans — War Clans</h1>
+      <p class="subtitle">
+        Filter high war-win clans by type, war state, raids, war size and TH compositions.
+        Data comes from your <code>clans.json</code> file.
+      </p>
     </header>
 
-    <!-- Filters -->
     <section class="filter-card">
-      <div class="filter-group-title">War Filters</div>
+      <!-- first row: type / war state / last war hours / war size -->
       <div class="filter-row-group">
-        <!-- Type -->
         <div class="filter-block">
-          <div class="filter-label">Clan Type</div>
+          <div class="filter-label">Type</div>
           <div class="pill-row" id="type-filters">
             <button class="pill active" data-value="all">All</button>
             <button class="pill" data-value="open">Open</button>
-            <button class="pill" data-value="inviteOnly">Invite Only</button>
+            <button class="pill" data-value="inviteOnly">Invite only</button>
             <button class="pill" data-value="closed">Closed</button>
           </div>
         </div>
 
-        <!-- War State -->
         <div class="filter-block">
-          <div class="filter-label">War Status</div>
+          <div class="filter-label">War state</div>
           <div class="pill-row" id="state-filters">
             <button class="pill active" data-value="all">All</button>
-            <button class="pill" data-value="inWar">In War</button>
-            <button class="pill" data-value="preparation">Prep</button>
-            <button class="pill" data-value="notInWar">Not In War</button>
+            <button class="pill" data-value="inWar">In war</button>
+            <button class="pill" data-value="preparation">Preparation</button>
+            <button class="pill" data-value="notInWar">Not in war</button>
+            <button class="pill" data-value="warEnded">War ended</button>
           </div>
         </div>
 
-        <!-- Numeric Inputs -->
         <div class="filter-block">
-          <div class="filter-label">Last War (Hrs)</div>
-          <input id="hours-input" class="input-field" type="number" placeholder="Exact hours" />
+          <div class="filter-label">Last war = (hours)</div>
+          <input id="hours-input" class="hours-input" type="number" min="0"
+                 placeholder="Empty = show all" inputmode="numeric" />
         </div>
+
         <div class="filter-block">
-          <div class="filter-label">War Size</div>
-          <input id="war-size-input" class="input-field" type="number" placeholder="e.g. 50" />
+          <div class="filter-label">War size =</div>
+          <input id="war-size-input" class="hours-input" type="number" min="0"
+                 placeholder="Any size" inputmode="numeric" />
         </div>
       </div>
 
-      <div class="filter-group-title">Raid Filters</div>
-      <div class="filter-row-group">
-        <!-- Raid State -->
+      <!-- second row: raid filters -->
+      <div class="filter-row-group" style="margin-top: 0.9rem;">
         <div class="filter-block">
-          <div class="filter-label">Raid Status</div>
+          <div class="filter-label">Raid state</div>
           <div class="pill-row" id="raid-filters">
             <button class="pill active" data-value="all">All</button>
             <button class="pill" data-value="ongoing">Ongoing</button>
             <button class="pill" data-value="ended">Ended</button>
+            <button class="pill" data-value="none">No raid</button>
           </div>
         </div>
 
-        <!-- Raid Numeric -->
         <div class="filter-block">
-          <div class="filter-label">Min Reward</div>
-          <input id="raid-reward-input" class="input-field" type="number" placeholder="e.g. 1500" />
+          <div class="filter-label">Raid reward ≥</div>
+          <input id="raid-reward-input" class="hours-input" type="number" min="0"
+                 placeholder="Any reward" inputmode="numeric" />
         </div>
+
         <div class="filter-block">
-          <div class="filter-label">Min Completed</div>
-          <input id="raid-completed-input" class="input-field" type="number" placeholder="e.g. 45" />
+          <div class="filter-label">Raids completed ≥</div>
+          <input id="raids-completed-input" class="hours-input" type="number" min="0"
+                 placeholder="Any count" inputmode="numeric" />
         </div>
       </div>
 
       <div class="filter-actions">
-        <button id="apply-btn" class="btn btn-primary">Apply Filters</button>
-        <button id="clear-btn" class="btn btn-ghost">Reset</button>
-        <button id="download-btn" class="btn btn-ghost">Export CSV</button>
-        <div class="count-pill">Records: <span id="row-count">0</span></div>
+        <button id="apply-btn" class="btn btn-primary">Apply filters</button>
+        <button id="clear-btn" class="btn btn-ghost">Clear</button>
+        <button id="download-csv-btn" class="btn btn-ghost">Download CSV</button>
+        <div id="count-label" class="count-pill">Showing <span>0</span> clans</div>
       </div>
     </section>
 
-    <!-- Table -->
-    <div class="table-container">
-      <table id="clan-table">
-        <thead>
-          <tr>
-            <th class="sortable text-left" data-key="name">Clan Name</th>
-            <th>Link</th>
-            <th class="sortable" data-key="type">Type</th>
-            <th class="sortable" data-key="clanLevel">Lvl</th>
-            <th class="sortable" data-key="warWins">Wins</th>
-            <th class="sortable" data-key="warWinStreak">Streak</th>
-            <th class="sortable" data-key="warLeague">League</th>
-            <th class="sortable" data-key="members">Mem</th>
-            <th class="sortable" data-key="teamSize">Size</th>
-            <th class="sortable" data-key="end_time">Hrs Ago</th>
-            <th class="sortable" data-key="state">War Status</th>
-            <th class="sortable" data-key="raidState">Raid Status</th>
-            <th class="sortable" data-key="raidTotalReward">Reward</th>
-            <th class="sortable" data-key="raidsCompleted">Comp</th>
-            <th>TH Comp</th>
-            <th>Opponent TH</th>
-          </tr>
-        </thead>
-        <tbody id="clan-tbody">
-          <!-- JS Populated -->
-        </tbody>
-      </table>
-    </div>
+    <section class="list-card">
+      <div class="list-header-title">CLAN LIST</div>
+      <div class="list-header-sub">Click headers to sort • Default: Win streak (desc)</div>
+      <div class="table-wrapper">
+        <table id="clan-table">
+          <thead>
+            <tr>
+              <th class="sortable" data-sort-key="name">Clan</th>
+              <th>Profile</th>
+              <th class="sortable" data-sort-key="type">Type</th>
+              <th class="sortable" data-sort-key="clanLevel">Lvl</th>
+              <th class="sortable" data-sort-key="warWins">War Wins</th>
+              <th class="sortable" data-sort-key="warWinStreak">Win Streak</th>
+              <th class="sortable" data-sort-key="warLeague">League</th>
+              <th class="sortable" data-sort-key="members">Members</th>
+              <th class="sortable" data-sort-key="teamSize">War size</th>
+              <th class="sortable" data-sort-key="end_time">Last war (hrs)</th>
+              <th class="sortable" data-sort-key="state">War state</th>
+              <th class="sortable" data-sort-key="raidState">Raid state</th>
+              <th class="sortable" data-sort-key="raidTotalReward">Raid reward</th>
+              <th class="sortable" data-sort-key="raidsCompleted">Raids done</th>
+              <th>TH comp</th>
+              <th>Opp TH comp</th>
+            </tr>
+          </thead>
+          <tbody id="clan-tbody">
+            <!-- filled by JS -->
+          </tbody>
+        </table>
+      </div>
+    </section>
   </div>
 
   <script>
-    let allClans = [];
-    let displayClans = [];
-    let sortState = { key: 'warWinStreak', dir: 'desc' };
+    let clans = [];
+    let currentView = [];
+    let sortConfig = { key: "warWinStreak", direction: "desc" };
 
-    async function init() {
-      try {
-        const resp = await fetch('clans.json');
-        const json = await resp.json();
-        
-        if (Array.isArray(json)) {
-          allClans = json;
-          document.getElementById('last-updated').textContent = new Date().toLocaleString();
+    async function loadClans() {
+      const res = await fetch("clans.json", {
+        cache: "no-store"
+      });
+
+      const data = await res.json();
+
+      let updatedText = "";
+
+      if (Array.isArray(data)) {
+        // Old format
+        clans = data;
+        updatedText = "Loaded at: " + new Date().toLocaleString();
+      } else if (data && Array.isArray(data.clans)) {
+        // NEW format
+        clans = data.clans;
+        updatedText = "Updated: " + data.updated;
+      } else {
+        clans = [];
+      }
+
+      document.getElementById("last-updated").textContent = updatedText;
+
+      applyFilters();
+      wireSorting();
+      updateSortHeaders();
+    }
+
+    function getActivePillValues(containerId) {
+      const active = [...document.querySelectorAll(`#${containerId} .pill.active`)]
+        .map(p => p.dataset.value);
+      if (active.includes("all") || active.length === 0) {
+        return ["all"];
+      }
+      return active;
+    }
+
+    const numericKeys = new Set([
+      "clanLevel",
+      "warWins",
+      "warWinStreak",
+      "members",
+      "teamSize",
+      "end_time",
+      "raidTotalReward",
+      "raidsCompleted"
+    ]);
+
+    function sortClans(list) {
+      const { key, direction } = sortConfig;
+      if (!key) return list.slice();
+
+      const dir = direction === "asc" ? 1 : -1;
+
+      return list.slice().sort((a, b) => {
+        let va = a[key];
+        let vb = b[key];
+
+        if (va == null && vb == null) return 0;
+        if (va == null) return 1;
+        if (vb == null) return -1;
+
+        if (numericKeys.has(key)) {
+          va = Number(va) || 0;
+          vb = Number(vb) || 0;
         } else {
-          allClans = json.clans || [];
-          document.getElementById('last-updated').textContent = json.updated || "Unknown";
+          va = String(va).toLowerCase();
+          vb = String(vb).toLowerCase();
         }
-        filterAndRender();
-      } catch (err) {
-        console.error(err);
-        document.getElementById('last-updated').textContent = "Error Loading clans.json";
+
+        if (va < vb) return -1 * dir;
+        if (va > vb) return 1 * dir;
+        return 0;
+      });
+    }
+
+    function updateSortHeaders() {
+      document.querySelectorAll("th.sortable").forEach(th => {
+        const key = th.dataset.sortKey;
+        if (key === sortConfig.key) {
+          th.dataset.sortDirection = sortConfig.direction;
+        } else {
+          th.dataset.sortDirection = "";
+        }
+      });
+    }
+
+    function wireSorting() {
+      document.querySelectorAll("th.sortable").forEach(th => {
+        th.addEventListener("click", () => {
+          const key = th.dataset.sortKey;
+          if (!key) return;
+
+          if (sortConfig.key === key) {
+            sortConfig.direction = sortConfig.direction === "asc" ? "desc" : "asc";
+          } else {
+            sortConfig.key = key;
+            sortConfig.direction = (key === "warWinStreak" || key === "warWins" || key === "raidTotalReward" || key === "raidsCompleted")
+              ? "desc"
+              : "asc";
+          }
+          applyFilters();
+          updateSortHeaders();
+        });
+      });
+    }
+
+    function renderThCompCell(td, value) {
+      td.innerHTML = "";
+      if (!value) {
+        td.textContent = "-";
+        return;
+      }
+      const parts = String(value).split(/\s+/).filter(Boolean);
+
+      for (const part of parts) {
+        const [thStr, countStr] = part.split(":");
+        const th = parseInt(thStr, 10);
+        const count = parseInt(countStr, 10);
+
+        const span = document.createElement("span");
+        span.classList.add("th-badge");
+
+        if (!Number.isNaN(th)) {
+          span.classList.add(`th-lv-${th}`);
+        }
+
+        if (!Number.isNaN(count)) {
+          if (count >= 30) span.classList.add("th-int-4");
+          else if (count >= 15) span.classList.add("th-int-3");
+          else if (count >= 5) span.classList.add("th-int-2");
+          else span.classList.add("th-int-1");
+          span.textContent = `${th}:${count}`;
+        } else {
+          span.textContent = part;
+        }
+
+        td.appendChild(span);
       }
     }
 
-    function getActivePills(id) {
-      return Array.from(document.querySelectorAll(`#${id} .pill.active`)).map(el => el.dataset.value);
+    function renderClans(list) {
+      const tbody = document.getElementById("clan-tbody");
+      tbody.innerHTML = "";
+
+      for (const c of list) {
+        const tr = document.createElement("tr");
+
+        const tdClan = document.createElement("td");
+        tdClan.innerHTML = `<div class="clan-name">${c.name || "Unknown"}</div>
+                            <div class="clan-tag">${c.tag || ""}</div>`;
+        tr.appendChild(tdClan);
+
+        const tdProfile = document.createElement("td");
+        if (c.tag) {
+          const cleanTag = c.tag.replace("#", "");
+          const href = `https://link.clashofclans.com/en?action=OpenClanProfile&tag=${cleanTag}`;
+          tdProfile.innerHTML = `<a class="profile-btn" href="${href}" target="_blank" rel="noopener">
+                                   Open
+                                 </a>`;
+        } else {
+          tdProfile.textContent = "-";
+        }
+        tr.appendChild(tdProfile);
+
+        const tdType = document.createElement("td");
+        const t = (c.type || "").toLowerCase();
+        let typeClass = "";
+        if (t === "open") typeClass = "open";
+        else if (t === "inviteonly") typeClass = "invite";
+        else if (t === "closed") typeClass = "closed";
+        tdType.innerHTML = `<span class="pill-label ${typeClass}">
+                              ${(c.type || "Unknown")}
+                            </span>`;
+        tr.appendChild(tdType);
+
+        const addCell = (val) => {
+          const td = document.createElement("td");
+          td.textContent = (val === null || val === undefined) ? "-" : val;
+          tr.appendChild(td);
+        };
+
+        addCell(c.clanLevel);
+        addCell(c.warWins);
+        addCell(c.warWinStreak);
+        addCell(c.warLeague || "-");
+        addCell(c.members);
+        addCell(c.teamSize);
+        addCell(c.end_time ?? "-");
+
+        const tdState = document.createElement("td");
+        const st = (c.state || "unknown");
+        let cls = "";
+        if (st === "inWar") cls = "state-inwar";
+        else if (st === "preparation") cls = "state-prep";
+        else if (st === "notInWar") cls = "state-not";
+        else if (st === "warEnded") cls = "state-ended";
+        tdState.innerHTML = `<span class="pill-label ${cls}">${st}</span>`;
+        tr.appendChild(tdState);
+
+        const tdRaidState = document.createElement("td");
+        const rsRaw = c.raidState == null ? "none" : c.raidState;
+        let rsCls = "";
+        if (rsRaw === "ongoing") rsCls = "state-prep";
+        else if (rsRaw === "ended") rsCls = "state-ended";
+        tdRaidState.innerHTML = `<span class="pill-label ${rsCls}">${rsRaw}</span>`;
+        tr.appendChild(tdRaidState);
+
+        addCell(c.raidTotalReward);
+        addCell(c.raidsCompleted);
+
+        const tdTh = document.createElement("td");
+        tdTh.className = "th-comp";
+        renderThCompCell(tdTh, c.th_comp);
+        tr.appendChild(tdTh);
+
+        const tdOppTh = document.createElement("td");
+        tdOppTh.className = "th-comp";
+        renderThCompCell(tdOppTh, c.opp_th_comp);
+        tr.appendChild(tdOppTh);
+
+        tbody.appendChild(tr);
+      }
+
+      document.querySelector("#count-label span").textContent = list.length.toString();
     }
 
-    function filterAndRender() {
-      const typeFilter = getActivePills('type-filters');
-      const stateFilter = getActivePills('state-filters');
-      const raidFilter = getActivePills('raid-filters');
-      const hoursVal = document.getElementById('hours-input').value;
-      const sizeVal = document.getElementById('war-size-input').value;
-      const raidRewardVal = document.getElementById('raid-reward-input').value;
-      const raidCompVal = document.getElementById('raid-completed-input').value;
+    function applyFilters() {
+      const typeFilters = getActivePillValues("type-filters");
+      const stateFilters = getActivePillValues("state-filters");
+      const raidFilters = getActivePillValues("raid-filters");
 
-      displayClans = allClans.filter(c => {
-        if (!typeFilter.includes('all') && !typeFilter.some(t => t.toLowerCase() === (c.type || "").toLowerCase())) return false;
-        
-        if (!stateFilter.includes('all')) {
-          const s = (c.state || "").toLowerCase();
-          if (!stateFilter.some(val => val.toLowerCase() === s)) return false;
+      const hoursInput = document.getElementById("hours-input");
+      const rawHours = hoursInput.value.trim();
+
+      let exactHours = null;
+      if (rawHours !== "") {
+        const parsed = parseFloat(rawHours);
+        if (!Number.isNaN(parsed) && parsed >= 0) {
+          exactHours = parsed;
+        }
+      }
+
+      const warSizeRaw = document.getElementById("war-size-input").value.trim();
+      let exactWarSize = null;
+      if (warSizeRaw !== "") {
+        const parsed = parseInt(warSizeRaw, 10);
+        if (!Number.isNaN(parsed) && parsed >= 0) {
+          exactWarSize = parsed;
+        }
+      }
+
+      const raidRewardRaw = document.getElementById("raid-reward-input").value.trim();
+      let minRaidReward = null;
+      if (raidRewardRaw !== "") {
+        const parsed = parseFloat(raidRewardRaw);
+        if (!Number.isNaN(parsed) && parsed >= 0) {
+          minRaidReward = parsed;
+        }
+      }
+
+      const raidsCompletedRaw = document.getElementById("raids-completed-input").value.trim();
+      let minRaidsCompleted = null;
+      if (raidsCompletedRaw !== "") {
+        const parsed = parseFloat(raidsCompletedRaw);
+        if (!Number.isNaN(parsed) && parsed >= 0) {
+          minRaidsCompleted = parsed;
+        }
+      }
+
+      const filtered = clans.filter(c => {
+        if (!typeFilters.includes("all")) {
+          const t = (c.type || "").toLowerCase();
+          const allowed = typeFilters.map(v => v.toLowerCase());
+          if (!allowed.includes(t)) return false;
         }
 
-        if (!raidFilter.includes('all')) {
-          const r = (c.raidState || "none").toLowerCase();
-          if (!raidFilter.some(val => val.toLowerCase() === r)) return false;
+        if (!stateFilters.includes("all")) {
+          const st = (c.state || "");
+          if (!stateFilters.includes(st)) return false;
         }
 
-        if (hoursVal && parseFloat(c.end_time) != parseFloat(hoursVal)) return false;
-        if (sizeVal && parseInt(c.teamSize) != parseInt(sizeVal)) return false;
-        if (raidRewardVal && (c.raidTotalReward || 0) < parseFloat(raidRewardVal)) return false;
-        if (raidCompVal && (c.raidsCompleted || 0) < parseFloat(raidCompVal)) return false;
+        if (exactHours !== null) {
+          const h = typeof c.end_time === "number"
+            ? c.end_time
+            : parseFloat(c.end_time);
+          if (Number.isNaN(h) || h !== exactHours) return false;
+        }
+
+        if (exactWarSize !== null) {
+          const sz = Number(c.teamSize);
+          if (Number.isNaN(sz) || sz !== exactWarSize) return false;
+        }
+
+        if (!raidFilters.includes("all")) {
+          const rs = c.raidState == null ? "none" : c.raidState;
+          if (!raidFilters.includes(rs)) return false;
+        }
+
+        if (minRaidReward !== null) {
+          const val = Number(c.raidTotalReward);
+          if (Number.isNaN(val) || val < minRaidReward) return false;
+        }
+
+        if (minRaidsCompleted !== null) {
+          const val = Number(c.raidsCompleted);
+          if (Number.isNaN(val) || val < minRaidsCompleted) return false;
+        }
 
         return true;
       });
 
-      sortData();
-      renderTable();
+      const sorted = sortClans(filtered);
+      currentView = sorted;
+      renderClans(sorted);
     }
 
-    function sortData() {
-      const { key, dir } = sortState;
-      const mul = dir === 'asc' ? 1 : -1;
+    function wirePills(containerId) {
+      const container = document.getElementById(containerId);
+      container.addEventListener("click", (e) => {
+        const pill = e.target.closest(".pill");
+        if (!pill) return;
 
-      displayClans.sort((a, b) => {
-        let valA = a[key];
-        let valB = b[key];
+        const value = pill.dataset.value;
 
-        if (valA === valB) return 0;
-        if (valA == null) return 1; 
-        if (valB == null) return -1;
-
-        if (typeof valA === 'number' && typeof valB === 'number') {
-          return (valA - valB) * mul;
-        }
-        return String(valA).localeCompare(String(valB)) * mul;
-      });
-
-      document.querySelectorAll('th.sortable').forEach(th => {
-        th.removeAttribute('data-sort-direction');
-        if (th.dataset.key === key) th.setAttribute('data-sort-direction', dir);
-      });
-    }
-
-    function renderTable() {
-      const tbody = document.getElementById('clan-tbody');
-      tbody.innerHTML = '';
-      document.getElementById('row-count').textContent = displayClans.length;
-
-      displayClans.forEach(c => {
-        const tr = document.createElement('tr');
-
-        const nameCell = document.createElement('td');
-        nameCell.className = 'text-left';
-        nameCell.innerHTML = `
-          <span class="clan-name">${c.name || "Unknown"}</span>
-          <span class="clan-tag">${c.tag || ""}</span>
-        `;
-        tr.appendChild(nameCell);
-
-        const linkCell = document.createElement('td');
-        const tagClean = c.tag ? c.tag.replace('#', '') : '';
-        linkCell.innerHTML = `<a href="https://link.clashofclans.com/en?action=OpenClanProfile&tag=${tagClean}" target="_blank" class="profile-btn">Open</a>`;
-        tr.appendChild(linkCell);
-
-        const createCell = (txt) => {
-          const td = document.createElement('td');
-          td.textContent = (txt !== null && txt !== undefined) ? txt : '-';
-          tr.appendChild(td);
+        if (value === "all") {
+          container.querySelectorAll(".pill").forEach(p => p.classList.remove("active"));
+          pill.classList.add("active");
+          return;
         }
 
-        createCell(c.type);
-        createCell(c.clanLevel);
-        createCell(c.warWins);
-        createCell(c.warWinStreak);
-        createCell(c.warLeague);
-        createCell(c.members);
-        createCell(c.teamSize);
-        createCell(typeof c.end_time === 'number' ? c.end_time.toFixed(1) : '-');
+        pill.classList.toggle("active");
 
-        const stateTd = document.createElement('td');
-        let stClass = 'st-not';
-        if (c.state === 'inWar') stClass = 'st-inwar';
-        if (c.state === 'preparation') stClass = 'st-prep';
-        stateTd.innerHTML = `<span class="status-pill ${stClass}">${c.state || '-'}</span>`;
-        tr.appendChild(stateTd);
+        const anyActive = [...container.querySelectorAll(".pill")]
+          .some(p => p.dataset.value !== "all" && p.classList.contains("active"));
 
-        const raidStTd = document.createElement('td');
-        let rStClass = 'st-not';
-        if (c.raidState === 'ongoing') rStClass = 'st-inwar'; 
-        if (c.raidState === 'ended') rStClass = 'st-prep';
-        raidStTd.innerHTML = `<span class="status-pill ${rStClass}">${c.raidState || '-'}</span>`;
-        tr.appendChild(raidStTd);
-
-        createCell(c.raidTotalReward);
-        createCell(c.raidsCompleted);
-
-        tr.appendChild(createThCell(c.th_comp));
-        tr.appendChild(createThCell(c.opp_th_comp));
-
-        tbody.appendChild(tr);
+        if (anyActive) {
+          container.querySelector('.pill[data-value="all"]').classList.remove("active");
+        } else {
+          container.querySelector('.pill[data-value="all"]').classList.add("active");
+        }
       });
     }
 
-    function createThCell(compStr) {
-      const td = document.createElement('td');
-      if (!compStr) {
-        td.textContent = '-';
-        return td;
+    document.getElementById("apply-btn").addEventListener("click", applyFilters);
+    document.getElementById("clear-btn").addEventListener("click", () => {
+      document.querySelectorAll(".pill").forEach(p => p.classList.remove("active"));
+      document.querySelector('#type-filters .pill[data-value="all"]').classList.add("active");
+      document.querySelector('#state-filters .pill[data-value="all"]').classList.add("active");
+      document.querySelector('#raid-filters .pill[data-value="all"]').classList.add("active");
+      document.getElementById("hours-input").value = "";
+      document.getElementById("war-size-input").value = "";
+      document.getElementById("raid-reward-input").value = "";
+      document.getElementById("raids-completed-input").value = "";
+      sortConfig = { key: "warWinStreak", direction: "desc" };
+      updateSortHeaders();
+      applyFilters();
+    });
+
+    document.getElementById("download-csv-btn").addEventListener("click", () => {
+      if (!currentView || currentView.length === 0) {
+        alert("No clans to export. Adjust filters or load data first.");
+        return;
       }
-      const container = document.createElement('div');
-      container.className = 'th-container';
-      const parts = compStr.split(' ');
-      parts.forEach(p => {
-        if (!p.includes(':')) return;
-        const [lvl, count] = p.split(':');
-        const span = document.createElement('span');
-        span.className = `th-badge th-${lvl}`;
-        span.textContent = `TH${lvl}:${count}`;
-        container.appendChild(span);
-      });
-      td.appendChild(container);
-      return td;
-    }
 
-    document.querySelectorAll('.pill').forEach(btn => {
-      btn.addEventListener('click', (e) => {
-        const group = e.target.parentElement;
-        const val = e.target.dataset.value;
-        if (val === 'all') {
-          group.querySelectorAll('.pill').forEach(p => p.classList.remove('active'));
-          e.target.classList.add('active');
-        } else {
-          e.target.classList.toggle('active');
-          group.querySelector('[data-value="all"]').classList.remove('active');
-          if (group.querySelectorAll('.pill.active').length === 0) {
-            group.querySelector('[data-value="all"]').classList.add('active');
-          }
-        }
-      });
-    });
+      const headers = [
+        "tag","name","type","clanLevel","clanPoints","requiredTrophies",
+        "warFrequency","warWinStreak","warWins","isWarLogPublic",
+        "members","teamSize","state","end_time",
+        "raidState","raidTotalReward","raidsCompleted",
+        "th_comp","opp_th_comp"
+      ];
 
-    document.querySelectorAll('th.sortable').forEach(th => {
-      th.addEventListener('click', () => {
-        const key = th.dataset.key;
-        if (sortState.key === key) {
-          sortState.dir = sortState.dir === 'asc' ? 'desc' : 'asc';
-        } else {
-          sortState.key = key;
-          sortState.dir = 'desc';
-        }
-        sortData();
-        renderTable();
-      });
-    });
+      const rows = [headers];
 
-    document.getElementById('apply-btn').addEventListener('click', filterAndRender);
-    
-    document.getElementById('clear-btn').addEventListener('click', () => {
-      document.querySelectorAll('.pill').forEach(p => p.classList.remove('active'));
-      document.querySelectorAll('[data-value="all"]').forEach(p => p.classList.add('active'));
-      document.querySelectorAll('input').forEach(i => i.value = '');
-      filterAndRender();
-    });
-
-    document.getElementById('download-btn').addEventListener('click', () => {
-      if(!displayClans.length) return;
-      const headers = Object.keys(displayClans[0]).join(',');
-      let csv = headers + '\n';
-      displayClans.forEach(row => {
-        csv += Object.values(row).map(v => `"${v}"`).join(',') + '\n';
+      currentView.forEach(c => {
+        rows.push(headers.map(h => (c[h] ?? "")));
       });
-      const blob = new Blob([csv], { type: 'text/csv' });
-      const url = window.URL.createObjectURL(blob);
-      const a = document.createElement('a');
+
+      const csv = rows.map(row =>
+        row.map(val => {
+          const s = String(val ?? "");
+          const needsQuote = s.includes(",") || s.includes('"') || s.includes("\n");
+          const escaped = s.replace(/"/g, '""');
+          return needsQuote ? `"${escaped}"` : escaped;
+        }).join(",")
+      ).join("\n");
+
+      const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
       a.href = url;
-      a.download = 'clans.csv';
+      a.download = "clans_export.csv";
+      document.body.appendChild(a);
       a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
     });
 
-    init();
+    wirePills("type-filters");
+    wirePills("state-filters");
+    wirePills("raid-filters");
+
+    loadClans();
   </script>
 </body>
 </html>
