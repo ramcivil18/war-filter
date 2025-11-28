@@ -8,7 +8,13 @@
 
   <style>
     /* --- FONTS --- */
-    @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Lato:wght@400;700&display=swap');
+    /* Ensure 'Supercell-Magic.ttf' exists in a 'fonts' folder next to this file */
+    @font-face {
+      font-family: "ClashFont";
+      src: url("fonts/Supercell-Magic.ttf") format("truetype");
+      font-weight: 400;
+      font-style: normal;
+    }
 
     /* --- ROYAL THEME VARIABLES --- */
     :root {
@@ -33,10 +39,10 @@
 
     body {
       margin: 0;
-      font-family: 'Lato', system-ui, sans-serif;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
       background-color: var(--bg-page);
       color: var(--text-main);
-      overflow-y: auto;
+      overflow-y: auto; /* Allow window scrolling */
       overflow-x: hidden;
     }
 
@@ -60,19 +66,15 @@
 
     h1 {
       margin: 0;
-      font-family: 'Cinzel', serif; /* Royal Serif Font */
-      font-size: clamp(1.8rem, 4vw, 2.8rem);
+      font-family: "ClashFont", sans-serif; /* Custom Font */
+      font-size: clamp(1.5rem, 3.5vw, 2.5rem); /* Adjusted size for bulky font */
       text-transform: uppercase;
       color: var(--royal-blue);
       letter-spacing: 1px;
       display: flex;
       align-items: center;
       gap: 10px;
-    }
-
-    h1::before {
-      content: '👑';
-      font-size: 0.8em;
+      text-shadow: 2px 2px 0px rgba(0,0,0,0.1);
     }
 
     .badge-row {
@@ -84,6 +86,7 @@
       text-transform: uppercase;
       letter-spacing: .05em;
       color: var(--royal-gold);
+      font-family: "ClashFont", sans-serif;
     }
 
     /* --- FILTER CARD --- */
@@ -98,9 +101,9 @@
     }
 
     .filter-group-title {
-      font-family: 'Cinzel', serif;
+      font-family: "ClashFont", sans-serif;
       color: var(--royal-blue);
-      font-size: 1rem;
+      font-size: 0.9rem;
       margin-bottom: 0.8rem;
       border-bottom: 1px solid var(--grid-line);
       padding-bottom: 0.3rem;
@@ -133,11 +136,11 @@
       border: 1px solid var(--pill-border);
       color: var(--text-main);
       padding: 0.4rem 0.9rem;
-      border-radius: 4px; /* Sharper corners for royal look */
+      border-radius: 4px;
       cursor: pointer;
       transition: 0.2s;
       font-size: 0.85rem;
-      font-weight: 500;
+      font-weight: 600;
     }
     .pill:hover { background: #e2e8f0; }
     .pill.active {
@@ -175,25 +178,30 @@
     }
 
     .btn {
-      padding: 0.6rem 1.5rem;
+      padding: 0.7rem 1.5rem;
       border-radius: 4px;
       border: none;
-      font-family: 'Cinzel', serif;
-      font-weight: 700;
+      font-family: "ClashFont", sans-serif;
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
       cursor: pointer;
       transition: transform 0.1s;
+      text-shadow: 1px 1px 0 rgba(0,0,0,0.2);
     }
     .btn:active { transform: translateY(1px); }
 
     .btn-primary {
       background: linear-gradient(to bottom, #d97706, #b45309);
       color: #fff;
-      box-shadow: 0 4px 6px rgba(180, 83, 9, 0.3);
+      box-shadow: 0 4px 0 #92400e;
     }
     .btn-ghost {
-      background: white;
+      background: #fff;
       border: 1px solid var(--royal-blue);
       color: var(--royal-blue);
+      box-shadow: 0 4px 0 #e2e8f0;
+      text-shadow: none;
     }
 
     .count-pill {
@@ -201,23 +209,27 @@
       font-weight: bold;
       color: var(--royal-blue);
       font-size: 0.9rem;
+      font-family: monospace;
     }
 
     /* --- TABLE STYLING --- */
     
     .table-container {
       width: 100%;
-      overflow-x: auto; /* Horizontal scroll on small screens */
+      /* This allows horizontal scroll if table is too wide, 
+         but lets the window handle vertical scroll for sticky headers */
+      overflow-x: auto;
       border: 1px solid var(--royal-blue);
       border-radius: 8px 8px 0 0;
       background: #fff;
       box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+      position: relative; /* Context for sticky */
     }
 
     table {
       width: 100%;
-      border-collapse: collapse;
-      min-width: 1300px; /* Ensure enough width for all columns */
+      border-collapse: collapse; /* Required for grid lines */
+      min-width: 1300px;
       font-size: 0.85rem;
     }
 
@@ -226,39 +238,41 @@
       position: sticky;
       top: 0;
       z-index: 50;
-      background: var(--royal-blue);
+      background: var(--royal-blue); /* Opaque background to hide scrolling content */
       color: #fff;
-      padding: 1rem 0.5rem;
+      padding: 1.2rem 0.5rem;
       text-transform: uppercase;
-      font-size: 0.75rem;
-      letter-spacing: 0.05em;
-      font-family: 'Lato', sans-serif;
-      border: 1px solid #3b5594; /* Slightly lighter blue for grid in header */
+      font-size: 0.7rem;
+      letter-spacing: 1px;
+      font-family: "ClashFont", sans-serif;
+      border: 1px solid #3b5594; /* Grid line for header */
       cursor: pointer;
       user-select: none;
+      line-height: 1.2;
+      text-align: center;
     }
     
     thead th:hover {
-      background: #172554; /* Darker blue on hover */
+      background: #172554;
     }
 
     /* Sort Indicators */
-    th.sortable::after { content: " ↕"; opacity: 0.4; }
+    th.sortable::after { content: " ↕"; opacity: 0.4; font-family: sans-serif; }
     th.sortable[data-sort-direction="asc"]::after { content: " ▲"; opacity: 1; color: var(--royal-gold-light); }
     th.sortable[data-sort-direction="desc"]::after { content: " ▼"; opacity: 1; color: var(--royal-gold-light); }
 
     /* Body Cells */
     tbody td {
       padding: 0.75rem 0.5rem;
-      border: 1px solid var(--grid-line);
+      border: 1px solid var(--grid-line); /* Grid lines for cells */
       color: var(--text-main);
       vertical-align: middle;
-      text-align: center; /* Centered Content */
+      text-align: center; /* Requirement: Center Align */
     }
 
     /* Zebra Striping */
     tbody tr:nth-child(even) { background-color: #f8fafc; }
-    tbody tr:hover { background-color: #e0f2fe; } /* Light blue hover */
+    tbody tr:hover { background-color: #e0f2fe; }
 
     /* Specific Columns */
     .text-left { text-align: left !important; }
@@ -276,24 +290,25 @@
       font-family: monospace;
     }
 
-    /* Buttons & Pills in Table */
     .profile-btn {
       display: inline-block;
       background: #fff;
       color: var(--royal-blue);
       border: 1px solid var(--royal-blue);
       text-decoration: none;
-      padding: 3px 12px;
+      padding: 4px 12px;
       border-radius: 99px;
-      font-size: 0.7rem;
+      font-size: 0.65rem;
       font-weight: 700;
       text-transform: uppercase;
+      font-family: "ClashFont", sans-serif;
     }
     .profile-btn:hover {
       background: var(--royal-blue);
       color: white;
     }
 
+    /* Status Pills */
     .status-pill {
       padding: 3px 8px;
       border-radius: 4px;
@@ -306,34 +321,33 @@
     .st-prep { background: #dbeafe; color: #1e40af; border-color: #93c5fd; }
     .st-not { background: #fee2e2; color: #991b1b; border-color: #fca5a5; }
 
-    /* TH Composition */
+    /* TH Badges */
     .th-container {
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
       gap: 3px;
-      max-width: 240px;
+      max-width: 250px;
       margin: 0 auto;
     }
     .th-badge {
       background: #fff;
       border: 1px solid #cbd5e1;
       border-radius: 3px;
-      padding: 1px 4px;
-      font-size: 0.7rem;
-      font-weight: 600;
+      padding: 2px 5px;
+      font-size: 0.75rem;
+      font-weight: 700;
       color: #334155;
       box-shadow: 0 1px 1px rgba(0,0,0,0.05);
       white-space: nowrap;
     }
-    /* Highlight high levels */
-    .th-18 { background: #fef9c3; border-color: #eab308; color: #854d0e; } /* Yellow/Gold */
-    .th-17 { background: #ffedd5; border-color: #f97316; color: #9a3412; } /* Orange */
-    .th-16 { background: #fee2e2; border-color: #ef4444; color: #991b1b; } /* Red */
+    .th-18 { background: #fef9c3; border-color: #eab308; color: #854d0e; }
+    .th-17 { background: #ffedd5; border-color: #f97316; color: #9a3412; }
+    .th-16 { background: #fee2e2; border-color: #ef4444; color: #991b1b; }
     
     @media (max-width: 768px) {
       .page-shell { padding: 1rem 10px; }
-      h1 { font-size: 1.5rem; }
+      h1 { font-size: 1.4rem; }
       .filter-card { padding: 1rem; }
     }
   </style>
@@ -346,9 +360,10 @@
         <span>Last Updated:</span>
         <span id="last-updated" style="color: var(--text-main)">Loading...</span>
       </div>
-      <h1>Clash of Clans War Info</h1>
+      <h1>Clash of Clans Intel</h1>
     </header>
 
+    <!-- Filters -->
     <section class="filter-card">
       <div class="filter-group-title">War Filters</div>
       <div class="filter-row-group">
@@ -376,7 +391,7 @@
 
         <!-- Numeric Inputs -->
         <div class="filter-block">
-          <div class="filter-label">Ended (Hrs Ago)</div>
+          <div class="filter-label">Last War (Hrs)</div>
           <input id="hours-input" class="input-field" type="number" placeholder="Exact hours" />
         </div>
         <div class="filter-block">
@@ -410,18 +425,19 @@
 
       <div class="filter-actions">
         <button id="apply-btn" class="btn btn-primary">Apply Filters</button>
-        <button id="clear-btn" class="btn btn-ghost">Clear</button>
+        <button id="clear-btn" class="btn btn-ghost">Reset</button>
         <button id="download-btn" class="btn btn-ghost">Export CSV</button>
         <div class="count-pill">Records: <span id="row-count">0</span></div>
       </div>
     </section>
 
+    <!-- Table -->
     <div class="table-container">
       <table id="clan-table">
         <thead>
           <tr>
             <th class="sortable text-left" data-key="name">Clan Name</th>
-            <th>Profile</th>
+            <th>Link</th>
             <th class="sortable" data-key="type">Type</th>
             <th class="sortable" data-key="clanLevel">Lvl</th>
             <th class="sortable" data-key="warWins">Wins</th>
@@ -430,8 +446,8 @@
             <th class="sortable" data-key="members">Mem</th>
             <th class="sortable" data-key="teamSize">Size</th>
             <th class="sortable" data-key="end_time">Hrs Ago</th>
-            <th class="sortable" data-key="state">State</th>
-            <th class="sortable" data-key="raidState">Raid</th>
+            <th class="sortable" data-key="state">War Status</th>
+            <th class="sortable" data-key="raidState">Raid Status</th>
             <th class="sortable" data-key="raidTotalReward">Reward</th>
             <th class="sortable" data-key="raidsCompleted">Comp</th>
             <th>TH Comp</th>
@@ -469,7 +485,6 @@
       }
     }
 
-    // Helper to get active pill values from a container
     function getActivePills(id) {
       return Array.from(document.querySelectorAll(`#${id} .pill.active`)).map(el => el.dataset.value);
     }
@@ -478,41 +493,27 @@
       const typeFilter = getActivePills('type-filters');
       const stateFilter = getActivePills('state-filters');
       const raidFilter = getActivePills('raid-filters');
-
       const hoursVal = document.getElementById('hours-input').value;
       const sizeVal = document.getElementById('war-size-input').value;
-      
       const raidRewardVal = document.getElementById('raid-reward-input').value;
       const raidCompVal = document.getElementById('raid-completed-input').value;
 
       displayClans = allClans.filter(c => {
-        // Type
-        if (!typeFilter.includes('all')) {
-          if (!typeFilter.some(t => t.toLowerCase() === (c.type || "").toLowerCase())) return false;
-        }
+        if (!typeFilter.includes('all') && !typeFilter.some(t => t.toLowerCase() === (c.type || "").toLowerCase())) return false;
         
-        // War State
         if (!stateFilter.includes('all')) {
           const s = (c.state || "").toLowerCase();
           if (!stateFilter.some(val => val.toLowerCase() === s)) return false;
         }
 
-        // Raid State
         if (!raidFilter.includes('all')) {
           const r = (c.raidState || "none").toLowerCase();
           if (!raidFilter.some(val => val.toLowerCase() === r)) return false;
         }
 
-        // Hours (Exact match logic from before)
         if (hoursVal && parseFloat(c.end_time) != parseFloat(hoursVal)) return false;
-
-        // Size
         if (sizeVal && parseInt(c.teamSize) != parseInt(sizeVal)) return false;
-
-        // Raid Reward (Min)
         if (raidRewardVal && (c.raidTotalReward || 0) < parseFloat(raidRewardVal)) return false;
-
-        // Raid Completed (Min)
         if (raidCompVal && (c.raidsCompleted || 0) < parseFloat(raidCompVal)) return false;
 
         return true;
@@ -540,7 +541,6 @@
         return String(valA).localeCompare(String(valB)) * mul;
       });
 
-      // Update headers UI
       document.querySelectorAll('th.sortable').forEach(th => {
         th.removeAttribute('data-sort-direction');
         if (th.dataset.key === key) th.setAttribute('data-sort-direction', dir);
@@ -555,7 +555,6 @@
       displayClans.forEach(c => {
         const tr = document.createElement('tr');
 
-        // Clan Name/Tag
         const nameCell = document.createElement('td');
         nameCell.className = 'text-left';
         nameCell.innerHTML = `
@@ -564,13 +563,11 @@
         `;
         tr.appendChild(nameCell);
 
-        // Link
         const linkCell = document.createElement('td');
         const tagClean = c.tag ? c.tag.replace('#', '') : '';
         linkCell.innerHTML = `<a href="https://link.clashofclans.com/en?action=OpenClanProfile&tag=${tagClean}" target="_blank" class="profile-btn">Open</a>`;
         tr.appendChild(linkCell);
 
-        // Helper to create simple cells
         const createCell = (txt) => {
           const td = document.createElement('td');
           td.textContent = (txt !== null && txt !== undefined) ? txt : '-';
@@ -586,7 +583,6 @@
         createCell(c.teamSize);
         createCell(typeof c.end_time === 'number' ? c.end_time.toFixed(1) : '-');
 
-        // War State Pill
         const stateTd = document.createElement('td');
         let stClass = 'st-not';
         if (c.state === 'inWar') stClass = 'st-inwar';
@@ -594,7 +590,6 @@
         stateTd.innerHTML = `<span class="status-pill ${stClass}">${c.state || '-'}</span>`;
         tr.appendChild(stateTd);
 
-        // Raid State Pill
         const raidStTd = document.createElement('td');
         let rStClass = 'st-not';
         if (c.raidState === 'ongoing') rStClass = 'st-inwar'; 
@@ -605,10 +600,7 @@
         createCell(c.raidTotalReward);
         createCell(c.raidsCompleted);
 
-        // TH Comp
         tr.appendChild(createThCell(c.th_comp));
-        
-        // Opp TH Comp
         tr.appendChild(createThCell(c.opp_th_comp));
 
         tbody.appendChild(tr);
@@ -621,36 +613,25 @@
         td.textContent = '-';
         return td;
       }
-      
       const container = document.createElement('div');
       container.className = 'th-container';
-      
-      // Splits string like "18:2 17:5"
       const parts = compStr.split(' ');
       parts.forEach(p => {
         if (!p.includes(':')) return;
         const [lvl, count] = p.split(':');
-        
         const span = document.createElement('span');
         span.className = `th-badge th-${lvl}`;
-        if(parseInt(lvl) < 13) span.classList.add('th-rest');
-        span.textContent = `${lvl}:${count}`;
-        
+        span.textContent = `TH${lvl}:${count}`;
         container.appendChild(span);
       });
-      
       td.appendChild(container);
       return td;
     }
 
-    // --- Events ---
-    
-    // Pill toggling
     document.querySelectorAll('.pill').forEach(btn => {
       btn.addEventListener('click', (e) => {
         const group = e.target.parentElement;
         const val = e.target.dataset.value;
-
         if (val === 'all') {
           group.querySelectorAll('.pill').forEach(p => p.classList.remove('active'));
           e.target.classList.add('active');
@@ -664,7 +645,6 @@
       });
     });
 
-    // Sort click
     document.querySelectorAll('th.sortable').forEach(th => {
       th.addEventListener('click', () => {
         const key = th.dataset.key;
@@ -679,7 +659,6 @@
       });
     });
 
-    // Filter Actions
     document.getElementById('apply-btn').addEventListener('click', filterAndRender);
     
     document.getElementById('clear-btn').addEventListener('click', () => {
@@ -704,7 +683,6 @@
       a.click();
     });
 
-    // Init
     init();
   </script>
 </body>
