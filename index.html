@@ -14,14 +14,14 @@
     :root {
       --bg-page: #f8f9fa;
       --bg-card: #ffffff;
-      --text-main: #1e293b;      /* Dark slate */
-      --text-subtle: #64748b;    /* Muted slate */
+      --text-main: #1e293b;
+      --text-subtle: #64748b;
       
-      --royal-blue: #1e3a8a;     /* Deep Royal Blue */
-      --royal-gold: #d97706;     /* Dark Gold/Bronze */
+      --royal-blue: #1e3a8a;
+      --royal-gold: #d97706;
       --royal-gold-light: #fbbf24;
       
-      --grid-line: #e2e8f0;      /* Light gray borders */
+      --grid-line: #cbd5e1;
       
       --pill-bg: #f1f5f9;
       --pill-border: #cbd5e1;
@@ -33,19 +33,18 @@
 
     body {
       margin: 0;
+      padding: 0;
       font-family: 'Lato', system-ui, sans-serif;
       background-color: var(--bg-page);
       color: var(--text-main);
-      overflow-y: auto;
-      overflow-x: hidden;
     }
 
-    /* --- PAGE LAYOUT --- */
-    .page-shell {
-      width: 100%;
-      max-width: 100%;
+    /* --- LAYOUT UTILS --- */
+    /* Wrapper for top content to keep it looking neat */
+    .content-pad {
+      max-width: 1400px;
       margin: 0 auto;
-      padding: 1.5rem 20px 3rem;
+      padding: 1.5rem 20px 0;
     }
 
     /* --- HEADER --- */
@@ -53,28 +52,22 @@
       display: flex;
       flex-direction: column;
       gap: 0.5rem;
-      margin-bottom: 2rem;
+      margin-bottom: 1.5rem;
       border-bottom: 3px solid var(--royal-gold);
       padding-bottom: 1rem;
     }
 
     h1 {
       margin: 0;
-      font-family: 'Cinzel', serif; /* Royal Serif Font */
-      font-size: clamp(1.8rem, 4vw, 2.8rem);
+      font-family: 'Cinzel', serif;
+      font-size: clamp(1.5rem, 3vw, 2.5rem);
       text-transform: uppercase;
       color: var(--royal-blue);
-      letter-spacing: 1px;
       display: flex;
       align-items: center;
       gap: 10px;
     }
-
-    h1::before {
-      content: '👑';
-      font-size: 0.8em;
-    }
-
+    
     .badge-row {
       display: inline-flex;
       align-items: center;
@@ -82,7 +75,6 @@
       font-size: .8rem;
       font-weight: 700;
       text-transform: uppercase;
-      letter-spacing: .05em;
       color: var(--royal-gold);
     }
 
@@ -91,8 +83,7 @@
       background: var(--bg-card);
       border-radius: 8px;
       padding: 1.5rem;
-      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 
-                  0 10px 15px -3px rgba(0, 0, 0, 0.05);
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
       border: 1px solid var(--grid-line);
       margin-bottom: 2rem;
     }
@@ -110,12 +101,12 @@
     .filter-row-group {
       display: flex;
       flex-wrap: wrap;
-      gap: 1.5rem;
+      gap: 1rem;
       align-items: flex-end;
       margin-bottom: 1.5rem;
     }
 
-    .filter-block { flex: 1 1 160px; }
+    .filter-block { flex: 1 1 auto; min-width: 140px; }
 
     .filter-label {
       font-size: 0.75rem;
@@ -132,8 +123,8 @@
       background: var(--pill-bg);
       border: 1px solid var(--pill-border);
       color: var(--text-main);
-      padding: 0.4rem 0.9rem;
-      border-radius: 4px; /* Sharper corners for royal look */
+      padding: 0.4rem 0.8rem;
+      border-radius: 4px;
       cursor: pointer;
       transition: 0.2s;
       font-size: 0.85rem;
@@ -144,26 +135,15 @@
       background: var(--pill-active-bg);
       color: var(--pill-active-text);
       border-color: var(--royal-blue);
-      box-shadow: 0 2px 4px rgba(30, 58, 138, 0.3);
     }
 
-    /* Inputs */
     .input-field {
       width: 100%;
-      padding: 0.5rem 0.8rem;
-      background: #fff;
+      padding: 0.5rem;
       border: 1px solid var(--pill-border);
       border-radius: 4px;
-      color: var(--text-main);
-      font-size: 0.9rem;
-    }
-    .input-field:focus {
-      outline: none;
-      border-color: var(--royal-gold);
-      box-shadow: 0 0 0 2px rgba(217, 119, 6, 0.1);
     }
 
-    /* Actions */
     .filter-actions {
       display: flex;
       align-items: center;
@@ -181,86 +161,69 @@
       font-family: 'Cinzel', serif;
       font-weight: 700;
       cursor: pointer;
-      transition: transform 0.1s;
     }
-    .btn:active { transform: translateY(1px); }
+    .btn-primary { background: linear-gradient(to bottom, #d97706, #b45309); color: #fff; }
+    .btn-ghost { background: white; border: 1px solid var(--royal-blue); color: var(--royal-blue); }
+    .count-pill { margin-left: auto; font-weight: bold; color: var(--royal-blue); }
 
-    .btn-primary {
-      background: linear-gradient(to bottom, #d97706, #b45309);
-      color: #fff;
-      box-shadow: 0 4px 6px rgba(180, 83, 9, 0.3);
-    }
-    .btn-ghost {
-      background: white;
-      border: 1px solid var(--royal-blue);
-      color: var(--royal-blue);
-    }
-
-    .count-pill {
-      margin-left: auto;
-      font-weight: bold;
-      color: var(--royal-blue);
-      font-size: 0.9rem;
-    }
-
-    /* --- TABLE STYLING --- */
+    /* --- FULL WIDTH TABLE STYLING --- */
     
-    .table-container {
+    .table-wrapper {
       width: 100%;
-      overflow-x: auto; /* Horizontal scroll on small screens */
-      border: 1px solid var(--royal-blue);
-      border-radius: 8px 8px 0 0;
-      background: #fff;
-      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+      /* Important: No overflow hidden here to allow sticky to work against window */
+      margin-bottom: 0;
+      padding-bottom: 0;
     }
 
     table {
       width: 100%;
       border-collapse: collapse;
-      min-width: 1300px; /* Ensure enough width for all columns */
+      /* If you want horizontal scroll on small screens, the body will scroll, 
+         or you can wrap table in overflow-x:auto but sticky headers get tricky.
+         Usually for this "App view" table width 100% is best */
+      min-width: 100%; 
       font-size: 0.85rem;
+      background: #fff;
     }
 
-    /* Sticky Header */
+    /* Sticky Header Logic */
     thead th {
       position: sticky;
-      top: 0;
-      z-index: 50;
+      top: 0; /* Sticks to top of browser window */
+      z-index: 1000; /* Stays on top of everything */
+      
       background: var(--royal-blue);
       color: #fff;
       padding: 1rem 0.5rem;
       text-transform: uppercase;
       font-size: 0.75rem;
       letter-spacing: 0.05em;
-      font-family: 'Lato', sans-serif;
-      border: 1px solid #3b5594; /* Slightly lighter blue for grid in header */
+      border-right: 1px solid #3b5594;
       cursor: pointer;
       user-select: none;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.2); /* Shadow to separate header from content */
     }
     
-    thead th:hover {
-      background: #172554; /* Darker blue on hover */
-    }
+    thead th:hover { background: #172554; }
 
     /* Sort Indicators */
     th.sortable::after { content: " ↕"; opacity: 0.4; }
     th.sortable[data-sort-direction="asc"]::after { content: " ▲"; opacity: 1; color: var(--royal-gold-light); }
     th.sortable[data-sort-direction="desc"]::after { content: " ▼"; opacity: 1; color: var(--royal-gold-light); }
 
-    /* Body Cells */
+    tbody tr { background: #fff; }
+    tbody tr:nth-child(even) { background-color: #f8fafc; }
+    tbody tr:hover { background-color: #e0f2fe; }
+
     tbody td {
       padding: 0.75rem 0.5rem;
-      border: 1px solid var(--grid-line);
+      border-bottom: 1px solid var(--grid-line);
+      border-right: 1px solid #f1f5f9;
       color: var(--text-main);
       vertical-align: middle;
-      text-align: center; /* Centered Content */
+      text-align: center;
     }
 
-    /* Zebra Striping */
-    tbody tr:nth-child(even) { background-color: #f8fafc; }
-    tbody tr:hover { background-color: #e0f2fe; } /* Light blue hover */
-
-    /* Specific Columns */
     .text-left { text-align: left !important; }
     
     .clan-name {
@@ -268,7 +231,6 @@
       font-size: 0.95rem;
       color: var(--royal-blue);
       display: block;
-      margin-bottom: 2px;
     }
     .clan-tag {
       font-size: 0.75rem;
@@ -276,71 +238,69 @@
       font-family: monospace;
     }
 
-    /* Buttons & Pills in Table */
     .profile-btn {
       display: inline-block;
-      background: #fff;
-      color: var(--royal-blue);
       border: 1px solid var(--royal-blue);
-      text-decoration: none;
-      padding: 3px 12px;
+      color: var(--royal-blue);
+      padding: 3px 10px;
       border-radius: 99px;
       font-size: 0.7rem;
       font-weight: 700;
+      text-decoration: none;
       text-transform: uppercase;
     }
-    .profile-btn:hover {
-      background: var(--royal-blue);
-      color: white;
-    }
+    .profile-btn:hover { background: var(--royal-blue); color: #fff; }
 
+    /* Status Pills */
     .status-pill {
-      padding: 3px 8px;
+      padding: 4px 8px;
       border-radius: 4px;
       font-size: 0.7rem;
       font-weight: 700;
       text-transform: uppercase;
       border: 1px solid transparent;
+      white-space: nowrap;
     }
     .st-inwar { background: #dcfce7; color: #166534; border-color: #86efac; }
     .st-prep { background: #dbeafe; color: #1e40af; border-color: #93c5fd; }
     .st-not { background: #fee2e2; color: #991b1b; border-color: #fca5a5; }
 
-    /* TH Composition */
+    /* TH Badges */
     .th-container {
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
       gap: 3px;
-      max-width: 240px;
+      max-width: 220px;
       margin: 0 auto;
     }
     .th-badge {
       background: #fff;
       border: 1px solid #cbd5e1;
-      border-radius: 3px;
-      padding: 1px 4px;
+      padding: 2px 5px;
       font-size: 0.7rem;
       font-weight: 600;
       color: #334155;
-      box-shadow: 0 1px 1px rgba(0,0,0,0.05);
+      border-radius: 3px;
       white-space: nowrap;
     }
-    /* Highlight high levels */
-    .th-18 { background: #fef9c3; border-color: #eab308; color: #854d0e; } /* Yellow/Gold */
-    .th-17 { background: #ffedd5; border-color: #f97316; color: #9a3412; } /* Orange */
-    .th-16 { background: #fee2e2; border-color: #ef4444; color: #991b1b; } /* Red */
-    
+    .th-18 { background: #fef9c3; border-color: #eab308; color: #854d0e; }
+    .th-17 { background: #ffedd5; border-color: #f97316; color: #9a3412; }
+    .th-16 { background: #fee2e2; border-color: #ef4444; color: #991b1b; }
+
     @media (max-width: 768px) {
-      .page-shell { padding: 1rem 10px; }
-      h1 { font-size: 1.5rem; }
+      /* On mobile, we might need horizontal scroll. 
+         Note: Position sticky requires parent overflow to be visible. 
+         If mobile table is too wide, the whole body will scroll horizontally. */
+      .content-pad { padding: 1rem 10px 0; }
       .filter-card { padding: 1rem; }
     }
   </style>
 </head>
 <body>
 
-  <div class="page-shell">
+  <!-- Padded Section for Title & Filters -->
+  <div class="content-pad">
     <header>
       <div class="badge-row">
         <span>Last Updated:</span>
@@ -352,7 +312,6 @@
     <section class="filter-card">
       <div class="filter-group-title">War Filters</div>
       <div class="filter-row-group">
-        <!-- Type -->
         <div class="filter-block">
           <div class="filter-label">Clan Type</div>
           <div class="pill-row" id="type-filters">
@@ -363,7 +322,6 @@
           </div>
         </div>
 
-        <!-- War State -->
         <div class="filter-block">
           <div class="filter-label">War Status</div>
           <div class="pill-row" id="state-filters">
@@ -374,7 +332,6 @@
           </div>
         </div>
 
-        <!-- Numeric Inputs -->
         <div class="filter-block">
           <div class="filter-label">Ended (Hrs Ago)</div>
           <input id="hours-input" class="input-field" type="number" placeholder="Exact hours" />
@@ -387,7 +344,6 @@
 
       <div class="filter-group-title">Raid Filters</div>
       <div class="filter-row-group">
-        <!-- Raid State -->
         <div class="filter-block">
           <div class="filter-label">Raid Status</div>
           <div class="pill-row" id="raid-filters">
@@ -396,8 +352,6 @@
             <button class="pill" data-value="ended">Ended</button>
           </div>
         </div>
-
-        <!-- Raid Numeric -->
         <div class="filter-block">
           <div class="filter-label">Min Reward</div>
           <input id="raid-reward-input" class="input-field" type="number" placeholder="e.g. 1500" />
@@ -415,34 +369,35 @@
         <div class="count-pill">Records: <span id="row-count">0</span></div>
       </div>
     </section>
+  </div>
 
-    <div class="table-container">
-      <table id="clan-table">
-        <thead>
-          <tr>
-            <th class="sortable text-left" data-key="name">Clan Name</th>
-            <th>Profile</th>
-            <th class="sortable" data-key="type">Type</th>
-            <th class="sortable" data-key="clanLevel">Lvl</th>
-            <th class="sortable" data-key="warWins">Wins</th>
-            <th class="sortable" data-key="warWinStreak">Streak</th>
-            <th class="sortable" data-key="warLeague">League</th>
-            <th class="sortable" data-key="members">Mem</th>
-            <th class="sortable" data-key="teamSize">Size</th>
-            <th class="sortable" data-key="end_time">Hrs Ago</th>
-            <th class="sortable" data-key="state">State</th>
-            <th class="sortable" data-key="raidState">Raid</th>
-            <th class="sortable" data-key="raidTotalReward">Reward</th>
-            <th class="sortable" data-key="raidsCompleted">Comp</th>
-            <th>TH Comp</th>
-            <th>Opponent TH</th>
-          </tr>
-        </thead>
-        <tbody id="clan-tbody">
-          <!-- JS Populated -->
-        </tbody>
-      </table>
-    </div>
+  <!-- Full Width Table Section (No Padding) -->
+  <div class="table-wrapper">
+    <table id="clan-table">
+      <thead>
+        <tr>
+          <th class="sortable text-left" data-key="name">Clan Name</th>
+          <th>Profile</th>
+          <th class="sortable" data-key="type">Type</th>
+          <th class="sortable" data-key="clanLevel">Lvl</th>
+          <th class="sortable" data-key="warWins">Wins</th>
+          <th class="sortable" data-key="warWinStreak">Streak</th>
+          <th class="sortable" data-key="warLeague">League</th>
+          <th class="sortable" data-key="members">Mem</th>
+          <th class="sortable" data-key="teamSize">Size</th>
+          <th class="sortable" data-key="end_time">Hrs Ago</th>
+          <th class="sortable" data-key="state">State</th>
+          <th class="sortable" data-key="raidState">Raid</th>
+          <th class="sortable" data-key="raidTotalReward">Reward</th>
+          <th class="sortable" data-key="raidsCompleted">Comp</th>
+          <th>TH Comp</th>
+          <th>Opponent TH</th>
+        </tr>
+      </thead>
+      <tbody id="clan-tbody">
+        <!-- JS Populated -->
+      </tbody>
+    </table>
   </div>
 
   <script>
@@ -469,7 +424,6 @@
       }
     }
 
-    // Helper to get active pill values from a container
     function getActivePills(id) {
       return Array.from(document.querySelectorAll(`#${id} .pill.active`)).map(el => el.dataset.value);
     }
@@ -478,43 +432,27 @@
       const typeFilter = getActivePills('type-filters');
       const stateFilter = getActivePills('state-filters');
       const raidFilter = getActivePills('raid-filters');
-
       const hoursVal = document.getElementById('hours-input').value;
       const sizeVal = document.getElementById('war-size-input').value;
-      
       const raidRewardVal = document.getElementById('raid-reward-input').value;
       const raidCompVal = document.getElementById('raid-completed-input').value;
 
       displayClans = allClans.filter(c => {
-        // Type
         if (!typeFilter.includes('all')) {
           if (!typeFilter.some(t => t.toLowerCase() === (c.type || "").toLowerCase())) return false;
         }
-        
-        // War State
         if (!stateFilter.includes('all')) {
           const s = (c.state || "").toLowerCase();
           if (!stateFilter.some(val => val.toLowerCase() === s)) return false;
         }
-
-        // Raid State
         if (!raidFilter.includes('all')) {
           const r = (c.raidState || "none").toLowerCase();
           if (!raidFilter.some(val => val.toLowerCase() === r)) return false;
         }
-
-        // Hours (Exact match logic from before)
         if (hoursVal && parseFloat(c.end_time) != parseFloat(hoursVal)) return false;
-
-        // Size
         if (sizeVal && parseInt(c.teamSize) != parseInt(sizeVal)) return false;
-
-        // Raid Reward (Min)
         if (raidRewardVal && (c.raidTotalReward || 0) < parseFloat(raidRewardVal)) return false;
-
-        // Raid Completed (Min)
         if (raidCompVal && (c.raidsCompleted || 0) < parseFloat(raidCompVal)) return false;
-
         return true;
       });
 
@@ -529,18 +467,15 @@
       displayClans.sort((a, b) => {
         let valA = a[key];
         let valB = b[key];
-
         if (valA === valB) return 0;
         if (valA == null) return 1; 
         if (valB == null) return -1;
-
         if (typeof valA === 'number' && typeof valB === 'number') {
           return (valA - valB) * mul;
         }
         return String(valA).localeCompare(String(valB)) * mul;
       });
 
-      // Update headers UI
       document.querySelectorAll('th.sortable').forEach(th => {
         th.removeAttribute('data-sort-direction');
         if (th.dataset.key === key) th.setAttribute('data-sort-direction', dir);
@@ -554,14 +489,11 @@
 
       displayClans.forEach(c => {
         const tr = document.createElement('tr');
-
-        // Clan Name/Tag
+        
+        // Name
         const nameCell = document.createElement('td');
         nameCell.className = 'text-left';
-        nameCell.innerHTML = `
-          <span class="clan-name">${c.name || "Unknown"}</span>
-          <span class="clan-tag">${c.tag || ""}</span>
-        `;
+        nameCell.innerHTML = `<span class="clan-name">${c.name || "Unknown"}</span><span class="clan-tag">${c.tag || ""}</span>`;
         tr.appendChild(nameCell);
 
         // Link
@@ -570,7 +502,6 @@
         linkCell.innerHTML = `<a href="https://link.clashofclans.com/en?action=OpenClanProfile&tag=${tagClean}" target="_blank" class="profile-btn">Open</a>`;
         tr.appendChild(linkCell);
 
-        // Helper to create simple cells
         const createCell = (txt) => {
           const td = document.createElement('td');
           td.textContent = (txt !== null && txt !== undefined) ? txt : '-';
@@ -586,7 +517,7 @@
         createCell(c.teamSize);
         createCell(typeof c.end_time === 'number' ? c.end_time.toFixed(1) : '-');
 
-        // War State Pill
+        // States
         const stateTd = document.createElement('td');
         let stClass = 'st-not';
         if (c.state === 'inWar') stClass = 'st-inwar';
@@ -594,7 +525,6 @@
         stateTd.innerHTML = `<span class="status-pill ${stClass}">${c.state || '-'}</span>`;
         tr.appendChild(stateTd);
 
-        // Raid State Pill
         const raidStTd = document.createElement('td');
         let rStClass = 'st-not';
         if (c.raidState === 'ongoing') rStClass = 'st-inwar'; 
@@ -605,10 +535,8 @@
         createCell(c.raidTotalReward);
         createCell(c.raidsCompleted);
 
-        // TH Comp
+        // TH Comps
         tr.appendChild(createThCell(c.th_comp));
-        
-        // Opp TH Comp
         tr.appendChild(createThCell(c.opp_th_comp));
 
         tbody.appendChild(tr);
@@ -617,54 +545,37 @@
 
     function createThCell(compStr) {
       const td = document.createElement('td');
-      if (!compStr) {
-        td.textContent = '-';
-        return td;
-      }
-      
+      if (!compStr) { td.textContent = '-'; return td; }
       const container = document.createElement('div');
       container.className = 'th-container';
-      
-      // Splits string like "18:2 17:5"
-      const parts = compStr.split(' ');
-      parts.forEach(p => {
+      compStr.split(' ').forEach(p => {
         if (!p.includes(':')) return;
         const [lvl, count] = p.split(':');
-        
         const span = document.createElement('span');
         span.className = `th-badge th-${lvl}`;
-        if(parseInt(lvl) < 13) span.classList.add('th-rest');
         span.textContent = `${lvl}:${count}`;
-        
         container.appendChild(span);
       });
-      
       td.appendChild(container);
       return td;
     }
 
-    // --- Events ---
-    
-    // Pill toggling
+    // Events
     document.querySelectorAll('.pill').forEach(btn => {
       btn.addEventListener('click', (e) => {
         const group = e.target.parentElement;
         const val = e.target.dataset.value;
-
         if (val === 'all') {
           group.querySelectorAll('.pill').forEach(p => p.classList.remove('active'));
           e.target.classList.add('active');
         } else {
           e.target.classList.toggle('active');
           group.querySelector('[data-value="all"]').classList.remove('active');
-          if (group.querySelectorAll('.pill.active').length === 0) {
-            group.querySelector('[data-value="all"]').classList.add('active');
-          }
+          if (group.querySelectorAll('.pill.active').length === 0) group.querySelector('[data-value="all"]').classList.add('active');
         }
       });
     });
 
-    // Sort click
     document.querySelectorAll('th.sortable').forEach(th => {
       th.addEventListener('click', () => {
         const key = th.dataset.key;
@@ -679,16 +590,13 @@
       });
     });
 
-    // Filter Actions
     document.getElementById('apply-btn').addEventListener('click', filterAndRender);
-    
     document.getElementById('clear-btn').addEventListener('click', () => {
       document.querySelectorAll('.pill').forEach(p => p.classList.remove('active'));
       document.querySelectorAll('[data-value="all"]').forEach(p => p.classList.add('active'));
       document.querySelectorAll('input').forEach(i => i.value = '');
       filterAndRender();
     });
-
     document.getElementById('download-btn').addEventListener('click', () => {
       if(!displayClans.length) return;
       const headers = Object.keys(displayClans[0]).join(',');
@@ -697,14 +605,12 @@
         csv += Object.values(row).map(v => `"${v}"`).join(',') + '\n';
       });
       const blob = new Blob([csv], { type: 'text/csv' });
-      const url = window.URL.createObjectURL(blob);
       const a = document.createElement('a');
-      a.href = url;
+      a.href = window.URL.createObjectURL(blob);
       a.download = 'clans.csv';
       a.click();
     });
 
-    // Init
     init();
   </script>
 </body>
