@@ -45,11 +45,11 @@
       background: radial-gradient(circle at top, #111d3d 0, var(--bg) 55%);
       color: var(--text-main);
       -webkit-font-smoothing: antialiased;
-      overflow-y: auto;
       overflow-x: hidden;
+      overflow-y: auto;
     }
 
-    /* darken page scrollbar */
+    /* dark global scrollbar so it’s not bright white */
     body::-webkit-scrollbar {
       width: 8px;
     }
@@ -281,8 +281,8 @@
 
     .table-wrapper {
       width: 100%;
-      overflow-x: auto;
-      overflow-y: auto;
+      overflow-x: auto;      /* horizontal scroll only */
+      overflow-y: visible;   /* page handles vertical scroll */
       -webkit-overflow-scrolling: touch;
       border-radius: 0 0 12px 12px;
       border: 1px solid rgba(30, 64, 175, .5);
@@ -290,14 +290,11 @@
         inset 0 1px 0 rgba(148, 163, 184, .08),
         0 8px 25px rgba(15, 23, 42, .9);
       background: radial-gradient(circle at top left, #111827 0, #020617 55%);
-      max-height: calc(100vh - 260px); /* leave room for filters/header */
-      position: relative;
     }
 
-    /* dark, subtle scrollbars for table */
+    /* horizontal scrollbar for table (dark) */
     .table-wrapper::-webkit-scrollbar {
       height: 8px;
-      width: 8px;
     }
     .table-wrapper::-webkit-scrollbar-track {
       background: #020617;
@@ -329,7 +326,7 @@
       border-bottom: 1px solid rgba(31, 41, 55, 1);
       border-right: 1px solid rgba(31, 41, 55, 1);
       position: sticky;
-      top: 0;
+      top: 0;                  /* stick to top of viewport while page scrolls */
       z-index: 5;
       background: rgba(15, 23, 42, .96);
     }
@@ -370,7 +367,7 @@
       border-bottom: 1px solid rgba(15, 23, 42, .95);
       border-right: 1px solid rgba(15, 23, 42, .95);
       color: #e5e7eb;
-      vertical-align: middle; /* center in cell */
+      vertical-align: middle;  /* center badges vertically */
       text-align: center;
     }
     tbody td:first-child {
@@ -459,7 +456,7 @@
       transform: translateY(-1px);
     }
 
-    /* widen TH columns so badges clearly sit in each column */
+    /* widen TH columns so badges stay clearly in their own column */
     th:nth-child(15),
     td:nth-child(15),
     th:nth-child(16),
@@ -468,7 +465,6 @@
       max-width: 260px;
     }
 
-    /* TH composition column styling */
     .th-comp {
       white-space: normal;
       font-size: 0.72rem;
@@ -477,7 +473,7 @@
       display: flex;
       flex-wrap: wrap;
       gap: 3px;
-      justify-content: flex-start;
+      justify-content: center;   /* center badges in cell horizontally */
     }
 
     .th-badge {
@@ -490,11 +486,10 @@
       font-weight: 500;
       border: 1px solid rgba(148, 163, 184, .55);
       background: rgba(15, 23, 42, .95);
-      flex: 0 0 calc(25% - 3px);  /* aim for 4 per row */
+      flex: 0 0 calc(25% - 3px);  /* try for 4 per row */
       box-sizing: border-box;
     }
 
-    /* Level colors */
     .th-lv-18 { background: radial-gradient(circle at top, #facc15, #92400e); color: #fef9c3; }
     .th-lv-17 { background: radial-gradient(circle at top, #fb923c, #7c2d12); color: #ffedd5; }
     .th-lv-16 { background: radial-gradient(circle at top, #f97316, #7c2d12); color: #ffedd5; }
@@ -504,7 +499,6 @@
     .th-lv-12 { background: radial-gradient(circle at top, #2dd4bf, #115e59); color: #ccfbf1; }
     .th-lv-11 { background: radial-gradient(circle at top, #9ca3af, #111827); color: #f9fafb; }
 
-    /* intensity by count */
     .th-int-1 { opacity: 0.95; }
     .th-int-2 { box-shadow: 0 0 4px rgba(148, 163, 184, .6); }
     .th-int-3 { box-shadow: 0 0 6px rgba(248, 250, 252, .7); border-color: rgba(248, 250, 252, .8); }
@@ -519,10 +513,6 @@
       }
       .filter-card {
         padding-inline: .7rem;
-      }
-      .table-wrapper {
-        border-radius: 0 0 10px 10px;
-        max-height: calc(100vh - 240px);
       }
     }
   </style>
