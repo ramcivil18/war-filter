@@ -45,9 +45,7 @@
       width: 100%;
       max-width: 100%;
       margin: 0 auto;
-      padding: 0;
-      min-height: 100vh;
-      background: var(--bg-card);
+      padding: 1.5rem 20px 3rem;
     }
 
     /* --- HEADER --- */
@@ -55,14 +53,9 @@
       display: flex;
       flex-direction: column;
       gap: 0.5rem;
-      margin-bottom: 0;
+      margin-bottom: 2rem;
       border-bottom: 3px solid var(--royal-gold);
-      padding: 1.2rem 1.5rem;
-      position: sticky;
-      top: 0;
-      z-index: 200;
-      background: var(--bg-card);
-      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.08);
+      padding-bottom: 1rem;
     }
 
     h1 {
@@ -101,18 +94,7 @@
       box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 
                   0 10px 15px -3px rgba(0, 0, 0, 0.05);
       border: 1px solid var(--grid-line);
-      margin-bottom: 1.5rem;
-      transition: max-height 0.25s ease, opacity 0.25s ease, padding 0.25s ease;
-    }
-
-    .filter-card.collapsed {
-      max-height: 0;
-      padding: 0 1.5rem;
-      opacity: 0;
-      margin-bottom: 0;
-      overflow: hidden;
-      border-width: 0;
-      box-shadow: none;
+      margin-bottom: 2rem;
     }
 
     .filter-group-title {
@@ -226,13 +208,10 @@
     .table-container {
       width: 100%;
       overflow-x: auto; /* Horizontal scroll on small screens */
-      overflow-y: auto; /* Enable vertical scroll so sticky header can pin */
-      max-height: 70vh; /* Keep table within viewport height */
       border: 1px solid var(--royal-blue);
       border-radius: 8px 8px 0 0;
       background: #fff;
       box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
-      position: relative;
     }
 
     table {
@@ -370,7 +349,7 @@
       <h1>Clash of Clans War Info</h1>
     </header>
 
-    <section id="filter-panel" class="filter-card">
+    <section class="filter-card">
       <div class="filter-group-title">War Filters</div>
       <div class="filter-row-group">
         <!-- Type -->
@@ -470,9 +449,6 @@
     let allClans = [];
     let displayClans = [];
     let sortState = { key: 'warWinStreak', dir: 'desc' };
-    const headerEl = document.querySelector('header');
-    const filterPanel = document.getElementById('filter-panel');
-    let lastScrollY = window.scrollY;
 
     async function init() {
       try {
@@ -727,22 +703,6 @@
       a.download = 'clans.csv';
       a.click();
     });
-
-    function handleScroll() {
-      if (!filterPanel) return;
-      const current = window.scrollY;
-      const threshold = (headerEl?.offsetHeight || 0) + 60;
-
-      if (current > lastScrollY && current > threshold) {
-        filterPanel.classList.add('collapsed');
-      } else if (current < lastScrollY - 10 || current <= threshold) {
-        filterPanel.classList.remove('collapsed');
-      }
-
-      lastScrollY = current;
-    }
-
-    window.addEventListener('scroll', handleScroll, { passive: true });
 
     // Init
     init();
