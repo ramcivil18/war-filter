@@ -100,6 +100,232 @@
       background: var(--base00);
     }
 
+    /* Mobile Filter Toggle */
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 4px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 8px;
+    }
+
+    .hamburger span {
+      width: 24px;
+      height: 2px;
+      background: var(--text-main);
+      transition: all 0.3s;
+    }
+
+    .filter-overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.7);
+      z-index: 90;
+    }
+
+    /* Mobile Responsive */
+    @media (max-width: 768px) {
+      body {
+        flex-direction: column;
+        height: 100vh;
+        overflow: hidden;
+      }
+
+      .sidebar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        width: 80%;
+        max-width: 280px;
+        z-index: 95;
+        transform: translateX(-100%);
+        box-shadow: 2px 0 8px rgba(0, 0, 0, 0.3);
+      }
+
+      .sidebar.open {
+        transform: translateX(0);
+      }
+
+      .hamburger {
+        display: flex;
+      }
+
+      .filter-overlay.show {
+        display: block;
+      }
+
+      .main {
+        width: 100%;
+        height: 100vh;
+        overflow: hidden;
+      }
+
+      .top-bar {
+        flex-direction: row;
+        gap: 8px;
+        padding: 10px 12px;
+        flex-wrap: wrap;
+      }
+
+      .top-left {
+        flex: 1;
+        min-width: 0;
+        gap: 8px;
+        flex-wrap: wrap;
+      }
+
+      .top-right {
+        display: flex;
+        gap: 8px;
+        align-items: center;
+      }
+
+      .stat-pill {
+        min-width: 0;
+      }
+
+      .stat-val {
+        font-size: 14px;
+      }
+
+      .stat-lbl {
+        font-size: 9px;
+      }
+
+      .sort-select,
+      .sort-btn {
+        font-size: 11px;
+        padding: 4px 6px;
+      }
+
+      .grid-container {
+        padding: 8px;
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+      }
+
+      .grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 8px;
+      }
+
+      .card-wrapper {
+        height: 140px;
+      }
+
+      .face {
+        padding: 8px;
+      }
+
+      .c-header {
+        margin-bottom: 6px;
+      }
+
+      .c-name {
+        font-size: 12px;
+        max-width: 80px;
+      }
+
+      .c-tag {
+        font-size: 9px;
+      }
+
+      .c-link {
+        font-size: 8px;
+        padding: 2px 4px;
+      }
+
+      .badges {
+        gap: 2px;
+        margin-bottom: 6px;
+      }
+
+      .badge {
+        font-size: 8px;
+        padding: 2px 4px;
+      }
+
+      .end-time-badge {
+        font-size: 8px;
+        gap: 2px;
+      }
+
+      .stats-row {
+        gap: 4px;
+        margin-bottom: 4px;
+      }
+
+      .stat {
+        padding: 4px 2px;
+      }
+
+      .s-val {
+        font-size: 11px;
+      }
+
+      .s-lbl {
+        font-size: 7px;
+      }
+
+      .footer {
+        margin-top: 6px;
+        padding-top: 6px;
+      }
+
+      .raid-row {
+        gap: 4px;
+      }
+
+      .raid-status {
+        font-size: 8px;
+        gap: 3px;
+      }
+
+      .raid-dot {
+        width: 5px;
+        height: 5px;
+      }
+
+      .raid-stats {
+        gap: 6px;
+      }
+
+      .rs-val {
+        font-size: 9px;
+      }
+
+      .rs-lbl {
+        font-size: 6px;
+      }
+
+      /* Back face */
+      .back-title {
+        font-size: 9px;
+        margin-bottom: 6px;
+      }
+
+      .th-container {
+        gap: 3px;
+      }
+
+      .th-pill {
+        font-size: 9px;
+        padding: 2px 4px;
+      }
+
+      .vs-text {
+        font-size: 9px;
+        margin: 8px 0;
+      }
+    }
+
     /* Sidebar */
     .sidebar {
       width: 280px;
@@ -111,176 +337,6 @@
       overflow-y: auto;
       flex-shrink: 0;
       transition: transform 0.3s ease;
-    }
-
-    /* Mobile Filter Toggle */
-    .filter-toggle {
-      display: none;
-      position: fixed;
-      bottom: 20px;
-      right: 20px;
-      width: 56px;
-      height: 56px;
-      background: var(--yellow);
-      border: none;
-      border-radius: 50%;
-      color: var(--base03);
-      font-size: 24px;
-      cursor: pointer;
-      z-index: 100;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-    }
-
-    .filter-overlay {
-      display: none;
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: rgba(0, 0, 0, 0.5);
-      z-index: 90;
-    }
-
-    /* Mobile Responsive */
-    @media (max-width: 768px) {
-      body {
-        flex-direction: column;
-      }
-
-      .sidebar {
-        position: fixed;
-        top: 0;
-        left: 0;
-        bottom: 0;
-        width: 85%;
-        max-width: 320px;
-        z-index: 95;
-        transform: translateX(-100%);
-        box-shadow: 2px 0 8px rgba(0, 0, 0, 0.3);
-      }
-
-      .sidebar.open {
-        transform: translateX(0);
-      }
-
-      .filter-toggle {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-      }
-
-      .filter-overlay.show {
-        display: block;
-      }
-
-      .main {
-        width: 100%;
-      }
-
-      .top-bar {
-        flex-direction: column;
-        gap: 12px;
-        padding: 12px 16px;
-      }
-
-      .top-left {
-        width: 100%;
-        justify-content: space-around;
-        gap: 12px;
-      }
-
-      .top-right {
-        width: 100%;
-        justify-content: space-between;
-      }
-
-      .stat-val {
-        font-size: 16px;
-      }
-
-      .grid-container {
-        padding: 12px;
-      }
-
-      .grid {
-        grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-        gap: 12px;
-      }
-
-      .card-wrapper {
-        height: 180px;
-      }
-
-      .face {
-        padding: 12px;
-      }
-
-      .c-name {
-        font-size: 14px;
-        max-width: 100px;
-      }
-
-      .c-tag {
-        font-size: 10px;
-      }
-
-      .c-link {
-        font-size: 9px;
-        padding: 2px 5px;
-      }
-
-      .badges {
-        gap: 3px;
-        margin-bottom: 8px;
-      }
-
-      .badge {
-        font-size: 9px;
-        padding: 2px 4px;
-      }
-
-      .end-time-badge {
-        font-size: 9px;
-      }
-
-      .stats-row {
-        gap: 6px;
-      }
-
-      .stat {
-        padding: 4px;
-      }
-
-      .s-val {
-        font-size: 12px;
-      }
-
-      .s-lbl {
-        font-size: 8px;
-      }
-
-      .footer {
-        margin-top: 8px;
-        padding-top: 8px;
-      }
-
-      .raid-status {
-        font-size: 9px;
-      }
-
-      .raid-dot {
-        width: 6px;
-        height: 6px;
-      }
-
-      .rs-val {
-        font-size: 10px;
-      }
-
-      .rs-lbl {
-        font-size: 7px;
-      }
     }
 
     /* Tablet */
@@ -831,6 +887,12 @@
 
   <main class="main">
     <div class="top-bar">
+      <button class="hamburger" onclick="app.toggleFilters()">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+
       <div class="top-left" id="topStats">
         <!-- Stats -->
       </div>
@@ -862,8 +924,7 @@
     </div>
   </main>
 
-  <!-- Mobile Filter Toggle -->
-  <button class="filter-toggle" onclick="app.toggleFilters()">⚙️</button>
+  <!-- Mobile Filter Overlay -->
   <div class="filter-overlay" onclick="app.toggleFilters()"></div>
 
   <script src="data.js"></script>
