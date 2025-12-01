@@ -673,6 +673,25 @@
       border-color: var(--yellow);
     }
 
+    /* Clan Type Colors */
+    .type-open {
+      background: rgba(133, 153, 0, 0.2);
+      color: var(--green);
+      border-color: var(--green);
+    }
+
+    .type-inviteOnly {
+      background: rgba(181, 137, 0, 0.2);
+      color: var(--yellow);
+      border-color: var(--yellow);
+    }
+
+    .type-closed {
+      background: rgba(220, 50, 47, 0.2);
+      color: var(--red);
+      border-color: var(--red);
+    }
+
     .stats-row {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
@@ -1188,6 +1207,7 @@
                   <span class="badge ${warBadgeClass}">${warBadgeText}</span>
                   <span class="badge ${lvlClass}">LVL ${c.clanLevel}</span>
                   <span class="badge">${c.warLeague.replace(' League', '')}</span>
+                  <span class="badge type-${c.type}">${c.type}</span>
                   ${c.end_time != null ? `<span class="end-time-badge">⏱ ${c.end_time}h</span>` : ''}
                 </div>
 
